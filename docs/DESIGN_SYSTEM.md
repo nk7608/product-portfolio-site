@@ -32,4 +32,4 @@ Professional project frontmatter owns homepage storytelling. Keep domain, outcom
 
 ## Maintenance and acceptance
 
-Add projects through MDX, writing through content/writing.json, and recommendations through content/recommendations.json. Validate content, types, lint, and a production build. Inspect desktop and narrow widths, both themes, keyboard navigation, focus return, disclosures, and reduced motion. The resume remains a view-only Google Doc preview until a public PDF is explicitly approved.
+Add projects through MDX, writing through content/writing.json, and recommendations through content/recommendations.json. Validate content, types, lint, and a production build. Inspect desktop and narrow widths, both themes, keyboard navigation, focus return, disclosures, and reduced motion. Resume CTAs must download the approved PDF from `public/assets`.

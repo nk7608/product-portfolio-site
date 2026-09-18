@@ -1,6 +1,7 @@
 # Content provenance
 
 - Professional roles and metrics: supplied `Nayana Kumari ProdEx Resume  (2).pdf`, read during planning. Narrative connective prose is a concise editorial synthesis, not a quotation from unpublished research.
+- Downloadable resume asset: supplied `Nayana Product WorkExp Resume .pdf`, published as `/assets/nayana-kumari-ai-product-manager-resume.pdf`.
 - Loans24: supplied seven-page `Loans24_Redesigned_Premises_Verification_Deck.pdf`, copied to `public/assets/loans24-premises-verification.pdf`. Proposed measures are labeled targets/concept outcomes.
 - Recommendations: user-supplied LinkedIn screenshots dated September 16, 2026 at 3:48:17 PM and 3:48:27 PM. Text is transcribed; Elaya's card uses complete visible sentences and is explicitly an excerpt. Author avatars use initials. Headlines are as shown in the screenshots.
 - [Cycle-synced workout launch](https://x.com/uncommonnayana/status/1918282453552341232), May 2, 2025. Its exact post is embedded in the personal prototype section.

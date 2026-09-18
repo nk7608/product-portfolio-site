@@ -21,7 +21,7 @@ Static work routes remain available at /work/[slug]. The homepage provides the p
 
 Professional work frontmatter controls the homepage: domain, outcome, metrics, product, challenge, ownership, decisions, shipped work, impact, and evidence links. MDX bodies retain Problem → Insight → Execution → Impact for static work pages.
 
-The resume opens a view-only Google Doc preview and is intentionally not a downloadable public asset.
+The resume is hosted as a same-origin PDF in `public/assets` and every resume CTA downloads that file.
 
 ## Analytics
 

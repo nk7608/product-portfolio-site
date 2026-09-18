@@ -7,7 +7,8 @@ import { Menu, Moon, Sun, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAnalytics, TrackedLink } from "./analytics";
 
-const resumeUrl = "https://docs.google.com/document/d/16Wz-oAqgGcgZ36rLB6bt4ICtLqCMLMaLhXMBpRDPePA/preview";
+const resumeUrl = "/assets/nayana-kumari-ai-product-manager-resume.pdf";
+const resumeFilename = "Nayana-Kumari-AI-Product-Manager-Resume.pdf";
 
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
@@ -43,7 +44,7 @@ export function Header() {
       <Link href="/" aria-label="Nayana Kumari home" className="wordmark">Nayana Kumari<span>.</span></Link>
       <nav aria-label="Main navigation" className="desktop-nav">
         {internal.map(([label, href]) => <Link className="nav-link" href={href} key={href}>{label}</Link>)}
-        <TrackedLink className="nav-link" href={resumeUrl} event="resume_link" item="header-resume">Resume</TrackedLink>
+        <TrackedLink className="nav-link" href={resumeUrl} download={resumeFilename} event="resume_link" item="header-resume">Resume</TrackedLink>
         <TrackedLink className="nav-link nav-contact" href="mailto:nayanak872@gmail.com" event="contact_open" item="header-email">Contact</TrackedLink>
         <ThemeToggle/>
       </nav>
@@ -51,7 +52,7 @@ export function Header() {
     </div>
     {open && <nav aria-label="Mobile navigation" className="mobile-nav">
       {internal.map(([label, href]) => <Link className="mobile-nav-link" href={href} key={href} onClick={() => setOpen(false)}>{label}</Link>)}
-      <TrackedLink className="mobile-nav-link" href={resumeUrl} event="resume_link" item="mobile-resume" onClick={() => setOpen(false)}>Resume</TrackedLink>
+      <TrackedLink className="mobile-nav-link" href={resumeUrl} download={resumeFilename} event="resume_link" item="mobile-resume" onClick={() => setOpen(false)}>Resume</TrackedLink>
       <TrackedLink className="mobile-nav-link" href="mailto:nayanak872@gmail.com" event="contact_open" item="mobile-email" onClick={() => setOpen(false)}>Contact</TrackedLink>
     </nav>}
   </header>;

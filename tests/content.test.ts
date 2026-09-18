@@ -39,6 +39,17 @@ test("the two featured deep dives include metric context, alignment, and reflect
     assert.ok(project.reflection,`${file} needs a reflection`);
   }
 });
+test("resume CTAs use the approved downloadable PDF",()=>{
+  const resumePath="public/assets/nayana-kumari-ai-product-manager-resume.pdf";
+  assert.ok(fs.existsSync(resumePath),"downloadable resume PDF is missing");
+  assert.ok(fs.statSync(resumePath).size>0,"downloadable resume PDF is empty");
+  for(const source of ["src/components/header.tsx","src/components/portfolio-home.tsx"]){
+    const content=fs.readFileSync(source,"utf8");
+    assert.match(content,/\/assets\/nayana-kumari-ai-product-manager-resume\.pdf/);
+    assert.match(content,/download=\{resumeFilename\}/);
+    assert.doesNotMatch(content,/docs\.google\.com\/document/);
+  }
+});
 test("all five screenshot recommendations retain attribution and the partial quote is explicit",()=>{
   const items=recommendations.map(value=>testimonialSchema.parse(value));
   assert.equal(items.length,5);
