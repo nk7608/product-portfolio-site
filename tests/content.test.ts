@@ -49,6 +49,7 @@ test("resume CTAs use the approved downloadable PDF",()=>{
     assert.match(content,/download=\{resumeFilename\}/);
     assert.doesNotMatch(content,/docs\.google\.com\/document/);
   }
+  assert.match(fs.readFileSync("next.config.ts","utf8"),/Content-Disposition[\s\S]*attachment;/);
 });
 test("all five screenshot recommendations retain attribution and the partial quote is explicit",()=>{
   const items=recommendations.map(value=>testimonialSchema.parse(value));
