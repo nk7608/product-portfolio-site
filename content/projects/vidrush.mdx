@@ -21,8 +21,11 @@ supportingMetrics:
 product: Vidrush turns an initial brief into a publish-ready long-form video by coordinating scripting, narration, media selection, editing, and rendering.
 challenge: Videos longer than 20 minutes required several generation and orchestration steps. The experience had to maintain acceptable output quality, control generation costs, and ask less configuration work of users.
 ownership: As Founding Product Manager, I led AI engineering delivery, wrote PRDs, defined benchmarks and KPIs, aligned engineering, design, and support, and used feedback to prioritise phased releases.
+metricContext: Access counts users granted product access per week, not weekly active users. ARR is a three-month company outcome supported by the wider team. Higher-tier adoption reflects customers selecting higher-priced plans after pricing, credit, and packaging changes.
+alignment: Infrastructure constraints favored fewer configurable choices for reliability, while users wanted control. I aligned engineering, design, and support around inferred defaults with an editable review step, giving the system room to optimise orchestration without removing user control.
+reflection: The highest tier initially had only two customers, so the packaging decision was informed by a small sample. I would instrument upgrade intent and price sensitivity earlier, then validate the revised tier with a broader cohort before scaling it.
 decisions:
-  - Benchmarked model quality and cost to choose a sensible default for long-form generation.
+  - Compared model quality and generation cost, then chose a good-enough default for long-form videos rather than maximizing output quality at an unsustainable cost.
   - Simplified the initial prompt flow so the system could infer format, duration, and video type while preserving customisation and human review.
   - Introduced flexible pay-as-you-go top-ups instead of subscription credit rollover, then rebalanced the highest tier's credit-to-cost ratio.
 shipped:
@@ -65,6 +68,10 @@ Scaling access and improving the product experience had to move together. Priori
 
 As founding Product Manager, I led AI engineering delivery, wrote PRDs, established benchmarks and KPIs, and used competitor research to prioritize work. We shipped six core features and four follow-up releases, alongside changes to pricing, credits, and packaging.
 
+## Alignment challenge
+
+Infrastructure constraints favored fewer configurable choices for reliability, while users wanted control. I aligned engineering, design, and support around inferred defaults with an editable review step, giving the system room to optimize orchestration without removing user control.
+
 ## Impact
 
 - Scaled product access from **10k to 80k users per week**. This measures access provision, not weekly active users.
@@ -73,3 +80,7 @@ As founding Product Manager, I led AI engineering delivery, wrote PRDs, establis
 - Reduced major disruption duration from **24–48 hours to under six hours**.
 
 These results are drawn from my résumé; internal research and product documents are not published here.
+
+## Reflection
+
+The highest tier initially had only two customers, so the packaging decision was informed by a small sample. I would instrument upgrade intent and price sensitivity earlier, then validate the revised tier with a broader cohort before scaling it.

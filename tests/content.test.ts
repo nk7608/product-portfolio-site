@@ -30,6 +30,15 @@ test("all four professional stories include progressive homepage content",()=>{
     assert.ok(project.decisions.length>=2&&project.shipped.length>=3&&project.impact.length>=3,`${file} needs decisions, shipped work, and impact`);
   }
 });
+test("the two featured deep dives include metric context, alignment, and reflection",()=>{
+  for(const file of ["vidrush.mdx","opsmith.mdx"]){
+    const {data}=matter(fs.readFileSync(path.join("content/projects",file),"utf8"));
+    const project=projectSchema.parse(data);
+    assert.ok(project.metricContext,`${file} needs metric context`);
+    assert.ok(project.alignment,`${file} needs an alignment story`);
+    assert.ok(project.reflection,`${file} needs a reflection`);
+  }
+});
 test("all five screenshot recommendations retain attribution and the partial quote is explicit",()=>{
   const items=recommendations.map(value=>testimonialSchema.parse(value));
   assert.equal(items.length,5);

@@ -7,7 +7,7 @@ import { Menu, Moon, Sun, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAnalytics, TrackedLink } from "./analytics";
 
-const resumeUrl = "https://docs.google.com/document/d/16Wz-oAqgGcgZ36rLB6bt4ICtLqCMLMaLhXMBpRDPePA/edit?usp=sharing";
+const resumeUrl = "https://docs.google.com/document/d/16Wz-oAqgGcgZ36rLB6bt4ICtLqCMLMaLhXMBpRDPePA/preview";
 
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
@@ -35,7 +35,7 @@ export function Header() {
   }, []);
 
   const internal = [
-    ["Work", "/#work"], ["Cases", "/#case-studies"], ["Builds", "/#builds"], ["Writing", "/#writing"], ["About", "/#about"],
+    ["Work", "/#work"], ["References", "/#references"], ["Independent work", "/#independent-work"], ["About", "/#about"],
   ] as const;
 
   return <header className={cn("site-header", scrolled && "is-scrolled", open && "menu-open")}>

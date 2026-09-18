@@ -8,7 +8,7 @@ Use Node 22+ and pnpm. Start development with pnpm dev. Run pnpm typecheck, pnpm
 
 ## Architecture
 
-The server homepage discovers and validates project MDX, then passes it to PortfolioHome. The client component renders the hero, proof panel, one-open-at-a-time product stories, independent case studies, builds, recommendations, writing, about, and contact. Shared providers supply theme, reduced-motion handling, and a vendor-neutral analytics adapter.
+The server homepage discovers and validates project MDX, then passes it to PortfolioHome. The client component renders the hero, proof panel, two one-open-at-a-time featured stories, compact shipped work, references, independent work, about, contact, and a compact writing footer. Shared providers supply theme, reduced-motion handling, and a vendor-neutral analytics adapter.
 
 Static work routes remain available at /work/[slug]. The homepage provides the primary case-study experience through inline progressive disclosure.
 
@@ -21,11 +21,11 @@ Static work routes remain available at /work/[slug]. The homepage provides the p
 
 Professional work frontmatter controls the homepage: domain, outcome, metrics, product, challenge, ownership, decisions, shipped work, impact, and evidence links. MDX bodies retain Problem → Insight → Execution → Impact for static work pages.
 
-The resume links to the current Google Doc and is intentionally not a downloadable public asset.
+The resume opens a view-only Google Doc preview and is intentionally not a downloadable public asset.
 
 ## Analytics
 
-AnalyticsWrapper currently uses a no-op adapter. Supported events cover case expansion, evidence links, builds, recommendations, writing, resume, contact, and theme changes. Do not add client secrets or visitor personal information.
+AnalyticsWrapper currently uses a no-op adapter. Supported events cover case expansion, evidence links, independent work, references, writing, resume, contact, and theme changes. Do not add client secrets or visitor personal information.
 
 ## Responsive behavior
 
