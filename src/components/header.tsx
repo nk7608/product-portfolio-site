@@ -35,7 +35,7 @@ export function Header() {
   }, []);
 
   const internal = [
-    ["Work", "/#work"], ["Builds", "/#builds"], ["Writing", "/#writing"], ["About", "/#about"],
+    ["Work", "/#work"], ["Cases", "/#case-studies"], ["Builds", "/#builds"], ["Writing", "/#writing"], ["About", "/#about"],
   ] as const;
 
   return <header className={cn("site-header", scrolled && "is-scrolled", open && "menu-open")}>

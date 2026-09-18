@@ -8,7 +8,7 @@ Use Node 22+ and pnpm. Start development with pnpm dev. Run pnpm typecheck, pnpm
 
 ## Architecture
 
-The server homepage discovers and validates project MDX, then passes it to PortfolioHome. The client component renders the hero, proof panel, one-open-at-a-time product stories, builds, recommendation disclosures, writing, about, and contact. Shared providers supply theme, reduced-motion handling, and a vendor-neutral analytics adapter.
+The server homepage discovers and validates project MDX, then passes it to PortfolioHome. The client component renders the hero, proof panel, one-open-at-a-time product stories, independent case studies, builds, recommendations, writing, about, and contact. Shared providers supply theme, reduced-motion handling, and a vendor-neutral analytics adapter.
 
 Static work routes remain available at /work/[slug]. The homepage provides the primary case-study experience through inline progressive disclosure.
 
