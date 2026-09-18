@@ -1,0 +1,10 @@
+node_modules/
+.next/
+.env*
+!.env.example
+*.tsbuildinfo
+.vercel/
+.pnpm-store/
+.DS_Store
+AGENTS.md
+sources/

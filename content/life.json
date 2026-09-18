@@ -1,0 +1,13 @@
+{
+  "books": [
+    {"title":"Tuesdays with Morrie","author":"Mitch Albom","status":"From my reading","note":"A reminder to question the culture we buy into.","href":"https://x.com/uncommonnayana/status/2098624293328637981","color":"ochre"},
+    {"title":"The Game Console 2.0","author":"Evan Amos","status":"On my wishlist","note":"A little design history. A lot of nostalgia.","href":"https://x.com/uncommonnayana/status/2091560189879296457","color":"blue"}
+  ],
+  "pitstops": ["Koramangala","Indiranagar","HSR Layout","Jayanagar"],
+  "journey": [
+    {"company":"Vidrush AI","role":"Founding Product Manager","period":"2026","location":"Remote"},
+    {"company":"Progress · Opsmith","role":"Associate Product Manager","period":"2025","location":"Bangalore"},
+    {"company":"Blaze AI","role":"Growth Product Manager","period":"2024","location":"Bangalore"},
+    {"company":"Phasio","role":"Junior Product Manager","period":"2022–24","location":"Remote"}
+  ]
+}
