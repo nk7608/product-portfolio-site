@@ -39,6 +39,11 @@ test("the two featured deep dives include metric context, alignment, and reflect
     assert.ok(project.reflection,`${file} needs a reflection`);
   }
 });
+test("Vidrush experience ends in September 2026",()=>{
+  const {data}=matter(fs.readFileSync("content/projects/vidrush.mdx","utf8"));
+  const project=projectSchema.parse(data);
+  assert.equal(project.period,"Jan — Sep 2026");
+});
 test("resume CTAs use the approved downloadable PDF",()=>{
   const resumePath="public/assets/nayana-kumari-ai-product-manager-resume.pdf";
   assert.ok(fs.existsSync(resumePath),"downloadable resume PDF is missing");
