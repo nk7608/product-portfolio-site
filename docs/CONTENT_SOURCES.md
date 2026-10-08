@@ -3,6 +3,7 @@
 - Professional roles and metrics: supplied `Nayana Kumari ProdEx Resume  (2).pdf`, read during planning. Narrative connective prose is a concise editorial synthesis, not a quotation from unpublished research.
 - Downloadable resume asset: supplied `Nayana Product Works Resume .pdf`, published as `/assets/nayana-kumari-ai-product-manager-resume.pdf`.
 - Loans24: supplied seven-page `Loans24_Redesigned_Premises_Verification_Deck.pdf`, copied to `public/assets/loans24-premises-verification.pdf`. Proposed measures are labeled targets/concept outcomes.
+- Swish: supplied twelve-page `swish-product-case-study.pdf`, copied to `public/assets/swish-product-case-study.pdf`. The independent-work summary reflects the deck's stated focus on repeat-order habits; the linked prototype and LinkedIn post were supplied by Nayana.
 - Recommendations: user-supplied LinkedIn screenshots dated September 16, 2026 at 3:48:17 PM and 3:48:27 PM. Text is transcribed; Elaya's card uses complete visible sentences and is explicitly an excerpt. Author avatars use initials. Headlines are as shown in the screenshots.
 - [Cycle-synced workout launch](https://x.com/uncommonnayana/status/1918282453552341232), May 2, 2025. Its exact post is embedded in the personal prototype section.
 - [Foobar source](https://github.com/nk7608/mvp-foobar): remote server and deployment backend are simulated.

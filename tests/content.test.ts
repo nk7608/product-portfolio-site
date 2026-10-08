@@ -56,6 +56,15 @@ test("resume CTAs use the approved downloadable PDF",()=>{
   }
   assert.match(fs.readFileSync("next.config.ts","utf8"),/Content-Disposition[\s\S]*attachment;/);
 });
+test("Swish independent work ships with its case study and public evidence",()=>{
+  const source=fs.readFileSync("src/components/portfolio-home.tsx","utf8");
+  const deck="public/assets/swish-product-case-study.pdf";
+  assert.ok(fs.existsSync(deck),"Swish case study PDF is missing");
+  assert.ok(fs.statSync(deck).size>0,"Swish case study PDF is empty");
+  assert.match(source,/\/assets\/swish-product-case-study\.pdf/);
+  assert.match(source,/https:\/\/swish-boost-nayana\.lovable\.app\//);
+  assert.match(source,/7513909037806014465/);
+});
 test("all five screenshot recommendations retain attribution and the partial quote is explicit",()=>{
   const items=recommendations.map(value=>testimonialSchema.parse(value));
   assert.equal(items.length,5);
