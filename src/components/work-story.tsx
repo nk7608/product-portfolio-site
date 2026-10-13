@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowRight, ArrowUpRight, Minus } from "lucide-react";
 import type { Project } from "@/lib/schema";
 import { cn } from "@/lib/utils";
+import { ProductGlyph } from "./visual-cues";
 import { TrackedLink } from "./analytics";
 const storyCtas:Record<string,string> = {vidrush:"Read the product brief",opsmith:"Read the product brief"};
 export function StoryDisclosure({project,index,open,muted,onToggle}:{project:Project;index:number;open:boolean;muted:boolean;onToggle:()=>void}) {
@@ -14,7 +15,7 @@ export function StoryDisclosure({project,index,open,muted,onToggle}:{project:Pro
   return <motion.article layout className={cn("work-story", open && "is-open", muted && "is-muted")} id={`work-${project.slug}`}>
     <button ref={trigger} type="button" className="work-summary" aria-expanded={open} aria-controls={contentId} onClick={onToggle}>
       <div className="work-summary-meta"><span className="work-number">0{index+1}</span><span className="domain-pill">{project.domain}</span><span>{project.period}</span></div>
-      <div className="work-summary-copy"><div><p className="work-company">{project.title}</p><p className="work-role">{project.role}</p></div><h3>{project.outcome ?? project.subtitle}</h3></div>
+      <div className="work-summary-copy"><div className="company-lockup"><ProductGlyph id={project.slug}/><div><p className="work-company">{project.title}</p><p className="work-role">{project.role}</p></div></div><h3>{project.outcome ?? project.subtitle}</h3></div>
       {!muted && <div className="work-metrics"><div className="primary-metric"><strong>{mainMetric?.value}</strong><span>{mainMetric?.label}</span></div><div className="supporting-metrics">{project.supportingMetrics.slice(0,2).map(metric => <span key={metric.label}><strong>{metric.value}</strong>{metric.label}</span>)}</div></div>}
       <span className="story-action">{open ? "Close story" : storyCtas[project.slug] ?? "View product story"}{open ? <Minus size={16}/> : <ArrowRight size={16}/>}</span>
     </button>

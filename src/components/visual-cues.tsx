@@ -1,0 +1,4 @@
+import {ArrowUpRight,AudioLines,Box,Clapperboard,Code2,Compass,Footprints,Heart,Layers,MapPin,MousePointer2,Sparkles,Sun,Utensils} from "lucide-react";
+const symbols={vidrush:Clapperboard,opsmith:Code2,blaze:AudioLines,phasio:Box,swish:Utensils,headout:Compass,pronto:Sparkles,loans24:MapPin,foobar:Code2,"cycle-synced":Heart};
+export function ProductGlyph({id}:{id:string}) {const Icon=symbols[id as keyof typeof symbols]??Layers;return <span className="product-glyph" aria-hidden="true"><Icon size={22} strokeWidth={1.7}/></span>;}
+export function DeskNotes(){return <div className="desk-notes" aria-hidden="true"><span className="sun-sticker"><Sun size={26}/><span>hello :)</span></span><span className="note-sticker"><MousePointer2 size={15}/> curious by default<ArrowUpRight size={15}/></span><span className="tiny-sticker"><Footprints size={18}/> one step at a time</span></div>;}
