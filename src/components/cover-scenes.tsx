@@ -178,7 +178,7 @@ const scenes: Record<string, ReactNode> = {
 export function CoverScene({ id }: { id: string }) {
   const scene = scenes[id];
   if (!scene) return null;
-  return <svg className="scene" viewBox="140 0 500 240" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
+  return <svg className="scene" viewBox="124 0 516 240" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
     <defs><linearGradient id={`g-${id}`} x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="var(--brand)" /><stop offset="1" stopColor="var(--brand-2)" /></linearGradient></defs>
     <g style={{ ["--grad" as string]: `url(#g-${id})` }}>{scene}</g>
   </svg>;
