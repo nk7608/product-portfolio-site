@@ -1,6 +1,6 @@
 # Permanent design system and reusable implementation instructions
 
-Maintain Nayana Kumari's portfolio as a proof-first product review with an **Autosend-inspired editorial system**: warm canvas, clay atmosphere, crisp white panels, generous space, and one focused story at a time. Professional work leads; references, independent work, concise writing, and personal context support it.
+Maintain Nayana Kumari's portfolio as a **guided product journey** with a warm Bangalore sunrise canvas, clay accents, document-like panels, compact typography, and one focused chapter at a time. Typeform-inspired route choices are optional. Every visitor can browse the complete portfolio immediately. See PRODUCT_JOURNEY.md for the current architecture and acceptance rules.
 
 Preserve Next.js App Router + TypeScript + Tailwind 4 + Motion + Radix + local MDX + next-themes + Vercel. Keep content separate from reusable layouts.
 
@@ -8,21 +8,21 @@ Preserve Next.js App Router + TypeScript + Tailwind 4 + Motion + Radix + local M
 
 | Token | Light | Dark |
 | --- | --- | --- |
-| Canvas | #FAF9F6 | #131217 |
-| Surface | #FFFFFF | #1B1A20 |
-| Ink | #181719 | #F7F5FB |
-| Secondary text | #69666E | #AAA6B3 |
-| Accent | #B83A20 | #FF8A65 |
+| Canvas | #FBF7EE | #12130F |
+| Surface | #FFFDF9 | #1C1D18 |
+| Ink | #181719 | #F6F1E7 |
+| Secondary text | #69666E | #BDB3A5 |
+| Accent | #B83A20 | #FF9270 |
 | Clay field | #F7E7DE | #39231C |
 | Sand field | #FBF0E9 | #2C2420 |
 
-Typography: self-hosted Instrument Serif for hero and major editorial headings, Geist Sans for interfaces and reading, and Geist Mono for dates, indices, labels, and metrics. Use a maximum width of 1180px, a 12-column desktop grid, 32px desktop gutters, and 16px mobile gutters. Primary panels use 20px radii; smaller controls are fully rounded.
+Typography: self-hosted Instrument Serif for hero and major editorial headings, Geist Sans for interfaces and reading, and Geist Mono for dates, indices, labels, and metrics. Use a maximum width of 1120px, a desktop chapter rail with a flexible content column, 32px desktop gutters, and 12–16px mobile gutters. Panels use 14–22px radii; smaller controls use restrained rounding. At mobile widths, guided navigation collapses into a See all steps control.
 
 ## Interaction and hierarchy
 
-Keep the page sequence: hero and proof → two featured professional stories → compact shipped work → references → independent work → about and contact → writing footer. Featured work uses one-open-at-a-time disclosures. Closed stories provide the company, domain, role, outcome, and metrics; open stories reveal product, challenge, ownership, decisions, shipped work, impact, metric context, alignment, reflection, and evidence.
+The full page runs welcome → product brief → career flow → shipped work → experiment lab → evidence and writing → personal interests and contact. Tailored routes reorder the first chapters but include all six, with personal interests last. Professional work uses one-open-at-a-time disclosures for all four companies. Closed stories provide company, domain, role, dates, outcome, and metrics; open stories retain all narrative, context, alignment, reflection, and evidence.
 
-Every interactive row or card uses the same feedback: vermilion border, pale clay tint, small arrow movement, and a restrained shadow. Hover and keyboard focus must communicate the same state. Use 150–180ms for feedback, 280–320ms for disclosures, and honor reduced motion. Never add autoplay, carousels, parallax, decorative diagrams, or product screenshots without a new explicit decision.
+Every interactive row or card uses the same feedback: vermilion border, pale clay tint, small arrow movement, and a restrained shadow. Hover and keyboard focus must communicate the same state. Use 150–180ms for feedback, 280–320ms for disclosures, and honor reduced motion. Never add autoplay, carousels, or parallax. Career connectors describe real progression. Scope Runner is an explicitly optional final-chapter and offline-page game; it never autostarts.
 
 ## Content honesty
 
@@ -32,4 +32,4 @@ Professional project frontmatter owns homepage storytelling. Keep domain, outcom
 
 ## Maintenance and acceptance
 
-Add projects through MDX, writing through content/writing.json, and recommendations through content/recommendations.json. Validate content, types, lint, and a production build. Inspect desktop and narrow widths, both themes, keyboard navigation, focus return, disclosures, and reduced motion. Resume CTAs must download the approved PDF from `public/assets`.
+Add professional projects through MDX, experiments through content/experiments.json, writing through content/writing.json, and recommendations through content/recommendations.json. Route order is defined in src/lib/journey.ts. Validate content, types, lint, and a production build. Inspect desktop and narrow widths, both themes, keyboard navigation, focus return, disclosures, and reduced motion. Resume CTAs must download the approved PDF from `public/assets`.

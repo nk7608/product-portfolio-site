@@ -57,7 +57,7 @@ test("resume CTAs use the approved downloadable PDF",()=>{
   assert.match(fs.readFileSync("next.config.ts","utf8"),/Content-Disposition[\s\S]*attachment;/);
 });
 test("Swish independent work ships with its case study and prototype",()=>{
-  const source=fs.readFileSync("src/components/portfolio-home.tsx","utf8");
+  const source=fs.readFileSync("content/experiments.json","utf8");
   const deck="public/assets/swish-product-case-study.pdf";
   assert.ok(fs.existsSync(deck),"Swish case study PDF is missing");
   assert.ok(fs.statSync(deck).size>0,"Swish case study PDF is empty");
