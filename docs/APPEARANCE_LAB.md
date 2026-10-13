@@ -30,3 +30,11 @@ The four themes now share layered atmosphere, translucent surfaces, inner highli
 New resume: Nayana K Product Works Resume.pdf. SHA-256: 3284dbc416b77969cbdf5c042204e5e0cc9782d78193c025100f7ff7915787a2. The public asset path remains unchanged for all CTAs.
 
 Validation: production build, lint and 16 tests passed. Expanded stories checked in all four themes at five viewport widths. Experiments checked in all four themes, both light/dark modes and five widths (40 combinations). No horizontal overflow; all six experiments retained. Standalone case page and mobile resume download verified. Downloaded PDF hash matches the user-provided file exactly.
+
+## Unified surfaces and product covers — October 13, 2026
+
+Every card in every look is now the same object, defined once in `src/app/surfaces.css`: frosted glass, a 1px gradient edge (CSS mask ring on `::after`), a cursor spotlight (`src/components/spotlight.tsx` writes `--mx/--my` on the hovered card, fine pointers only), a hover lift, and an "active" ring for open stories and focused cards. Featured surfaces (route picker, contact panel) add a coloured outer halo. Looks only change tokens in `appearance.css` (`--glass`, `--edge*`, `--card-shadow*`, `--spot*`, `--radius-card`, `--lift`, cover tokens), so a new effect lands in all four looks at once. Do not add per-look card backgrounds, borders or shadows; add or change a token instead.
+
+LinkedIn marketing banners are removed. Work and experiment covers are original SVG scenes (`src/components/cover-scenes.tsx`) that show what each product does and, on work covers, a one-line "What shipped" caption from the release notes. Scenes are tinted by the brand hue in `brand-assets.ts` and restyled per look (dotted paper, cobalt blueprint, record-sleeve grooves, editorial hairlines). Company logos remain the only brand artwork.
+
+The page atmosphere is a viewport-fixed layer with a slow drift (off under reduced motion), so the glow never ends in a hard edge mid-page. Career flow is a compact 2×2 / 4-up progression; full detail lives in the product briefs. The hero adds a "Shipped with" logo strip.

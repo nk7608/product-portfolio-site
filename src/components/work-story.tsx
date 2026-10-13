@@ -4,10 +4,9 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowRight, ArrowUpRight, Minus } from "lucide-react";
 import type { Project } from "@/lib/schema";
 import { cn } from "@/lib/utils";
-import { BrandCover, BrandLogo } from "./brand-cover";
+import { BrandLogo, ProductCover } from "./brand-cover";
 import { ProductGlyph } from "./visual-cues";
 import { TrackedLink } from "./analytics";
-const storyCtas:Record<string,string> = {vidrush:"Read the product brief",opsmith:"Read the product brief"};
 export function StoryDisclosure({project,index,open,muted,onToggle}:{project:Project;index:number;open:boolean;muted:boolean;onToggle:()=>void}) {
   const trigger = useRef<HTMLButtonElement>(null);
   const reduceMotion = useReducedMotion();
@@ -15,10 +14,10 @@ export function StoryDisclosure({project,index,open,muted,onToggle}:{project:Pro
   const mainMetric = project.primaryMetric ?? project.metrics[0];
   return <motion.article layout className={cn("work-story", open && "is-open", muted && "is-muted")} id={`work-${project.slug}`}>
     <button ref={trigger} type="button" className="work-summary" aria-expanded={open} aria-controls={contentId} onClick={onToggle}>
-      <BrandCover id={project.slug}/><div className="work-summary-meta"><span className="work-number">0{index+1}</span><span className="domain-pill">{project.domain}</span><span>{project.period}</span></div>
+      <ProductCover id={project.slug} caption/><div className="work-summary-meta"><span className="work-number">0{index+1}</span><span className="domain-pill">{project.domain}</span><span>{project.period}</span></div>
       <div className="work-summary-copy"><div className="company-lockup"><ProductGlyph id={project.slug}/><div><p className="work-company">{project.title}</p><p className="work-role">{project.role}</p></div></div><h3>{project.outcome ?? project.subtitle}</h3></div>
       {!muted && <div className="work-metrics"><div className="primary-metric"><strong>{mainMetric?.value}</strong><span>{mainMetric?.label}</span></div><div className="supporting-metrics">{project.supportingMetrics.slice(0,2).map(metric => <span key={metric.label}><strong>{metric.value}</strong>{metric.label}</span>)}</div></div>}
-      <span className="story-action">{open ? "Close story" : storyCtas[project.slug] ?? "View product story"}{open ? <Minus size={16}/> : <ArrowRight size={16}/>}</span>
+      <span className="story-action">{open ? "Close story" : "Read the product brief"}{open ? <Minus size={16}/> : <ArrowRight size={16}/>}</span>
     </button>
     <AnimatePresence initial={false}>
       {open && <motion.div id={contentId} className="story-content" initial={{height:0,opacity:0}} animate={{height:"auto",opacity:1}} exit={{height:0,opacity:0}} transition={{duration:reduceMotion?0:.3,ease:[.22,1,.36,1]}}>
