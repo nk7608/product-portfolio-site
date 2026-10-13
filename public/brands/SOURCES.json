@@ -1,0 +1,106 @@
+{
+  "vidrush": {
+    "page": "https://www.linkedin.com/company/vidrush",
+    "logo": {
+      "source": "https://media.licdn.com/dms/image/v2/D4E0BAQFgFbQC5w8HoA/company-logo_200_200/B4EaBsj0CmJwAM-/0/1788527722885/vidrush_logo?e=2147483647&v=beta&t=LS6ZzOl0mTbj8asSCeuohTnrcg3I-WaOmgi8ET-fzvc",
+      "local": "public/brands/vidrush-logo.jpg",
+      "bytes": 3926
+    },
+    "cover": {
+      "source": "https://media.licdn.com/dms/image/v2/D4E3DAQFvSgEWpjc5eg/image-scale_191_1128/B4EaBskmQgJwAc-/0/1788527928700/vidrush_cover?e=2147483647&v=beta&t=ayPYRkNoKeP8zSVRsF9rxs1E1PfB6_W-5jv9OuXzrZU",
+      "local": "public/brands/vidrush-cover.jpg",
+      "bytes": 36808
+    }
+  },
+  "opsmith": {
+    "page": "https://www.linkedin.com/company/progress-software",
+    "logo": {
+      "source": "https://media.licdn.com/dms/image/v2/D4E0BAQGldm6803bfwQ/company-logo_200_200/company-logo_200_200/0/1719852274348/progress_software_logo?e=2147483647&v=beta&t=sX3L4DkDXYMXt9X15beYL-V3ERDwtjnctX_fCxGIIrg",
+      "local": "public/brands/opsmith-logo.jpg",
+      "bytes": 4103
+    },
+    "cover": {
+      "source": "https://media.licdn.com/dms/image/v2/D563DAQE0cFPNSadZxA/image-scale_325_1920/B56aEcMgS6GcAI-/0/1791474402790/progress_software_cover?e=2147483647&v=beta&t=MvAdabRB7ARJPvyMsB9khN0P_-P8dL6e1qX4kP4iXw8",
+      "local": "public/brands/opsmith-cover.jpg",
+      "bytes": 36989
+    }
+  },
+  "phasio": {
+    "page": "https://www.linkedin.com/company/phasio",
+    "logo": {
+      "source": "https://media.licdn.com/dms/image/v2/D4E0BAQHBoB4iPvtQWw/company-logo_200_200/B4EZeN668eGcAI-/0/1750432723035/phasio_logo?e=2147483647&v=beta&t=TjhNdoYNg7EPbzPZElc06nWSVEPaIQUZQ4dnAH_kiAU",
+      "local": "public/brands/phasio-logo.jpg",
+      "bytes": 4281
+    },
+    "cover": {
+      "source": "https://media.licdn.com/dms/image/v2/D4E3DAQHBWaRo4Mo4OQ/image-scale_191_1128/B4EZeN7G0ZHgAc-/0/1750432771779/phasio_cover?e=2147483647&v=beta&t=YL69f0ahClp8FF77p2IDmIcKemCqOPTW2_VLAJddZ5o",
+      "local": "public/brands/phasio-cover.jpg",
+      "bytes": 22805
+    }
+  },
+  "blaze": {
+    "page": "https://www.linkedin.com/company/withblazeapp",
+    "logo": {
+      "source": "https://media.licdn.com/dms/image/v2/C4E0BAQGFP_jyku17zg/company-logo_200_200/company-logo_200_200/0/1646955817011/withblazeapp_logo?e=2147483647&v=beta&t=FiTHzHJbB5VIQaaJgL4PLUAz3HL9LyqCtHxogW_ehWY",
+      "local": "public/brands/blaze-logo.jpg",
+      "bytes": 3244
+    },
+    "cover": {
+      "source": "https://media.licdn.com/dms/image/v2/D563DAQFaJMOyHqwFEA/image-scale_191_1128/image-scale_191_1128/0/1725011005815/withblazeapp_cover?e=2147483647&v=beta&t=NKnrwdRLDjs5dPqeX-LqbbFy8MLChQgBjqGSJ67O58k",
+      "local": "public/brands/blaze-cover.jpg",
+      "bytes": 23983
+    }
+  },
+  "swish": {
+    "page": "https://www.linkedin.com/company/justswish",
+    "logo": {
+      "source": "https://media.licdn.com/dms/image/v2/D560BAQF-SiP8WRHrvw/company-logo_200_200/B56ZpFEYtAG4AI-/0/1762095369655/justswish_logo?e=2147483647&v=beta&t=T9Cen54TrX27nKE-0z1z8R5-Nkh9dPGsjWT3gVO3QCI",
+      "local": "public/brands/swish-logo.jpg",
+      "bytes": 5311
+    },
+    "cover": {
+      "source": "https://media.licdn.com/dms/image/v2/D563DAQHAOgfPMvweVg/image-scale_191_1128/B56ZndVfsDG4Ac-/0/1760355025232/justswish_cover?e=2147483647&v=beta&t=1j0UlW0L8vROyEh_-SB_tWzfRi53vpi-QIaJ-wytNug",
+      "local": "public/brands/swish-cover.jpg",
+      "bytes": 62891
+    }
+  },
+  "pronto": {
+    "page": "https://www.linkedin.com/company/withpronto",
+    "logo": {
+      "source": "https://media.licdn.com/dms/image/v2/D4E0BAQGttGEXzPWTYw/company-logo_200_200/B4EZWJMLVwHcAM-/0/1741763426260/withpronto_logo?e=2147483647&v=beta&t=rozeWYnocrEFKuYvgBY5pKlJvXvXWfGke5_d8alGS0Y",
+      "local": "public/brands/pronto-logo.jpg",
+      "bytes": 4120
+    },
+    "cover": {
+      "source": "https://media.licdn.com/dms/image/v2/D4D3DAQGmRfJiJBFGHw/image-scale_191_1128/B4DZ6mWmQ8GcAY-/0/1780907402550/withpronto_cover?e=2147483647&v=beta&t=at8vV7u0I2zRtGaPAO6w9I4DjtEae3hiMSkRdPPF38c",
+      "local": "public/brands/pronto-cover.jpg",
+      "bytes": 20723
+    }
+  },
+  "headout": {
+    "page": "https://www.linkedin.com/company/headout-com",
+    "logo": {
+      "source": "https://media.licdn.com/dms/image/v2/D560BAQF36N2orKYsLg/company-logo_200_200/B56ZozJFPlHIAI-/0/1761794611427/headout_com_logo?e=2147483647&v=beta&t=pa-eYWxIo-JD2QN8EjntepV5NWPn6mHHQnU8BFgZaH8",
+      "local": "public/brands/headout-logo.jpg",
+      "bytes": 5895
+    },
+    "cover": {
+      "source": "https://media.licdn.com/dms/image/v2/D563DAQFc9SDYE1A1Mg/image-scale_191_1128/B56Zz7vRJWKAAc-/0/1773750000431/headout_com_cover?e=2147483647&v=beta&t=zRypA-ZFN0Eg25SG7gxxcBqpuA2cqgbcPB93lmVKipM",
+      "local": "public/brands/headout-cover.jpg",
+      "bytes": 49263
+    }
+  },
+  "loans24": {
+    "page": "https://in.linkedin.com/company/loans24-cars24-financial-services-pvt-ltd",
+    "logo": {
+      "source": "https://media.licdn.com/dms/image/v2/D4E0BAQEs3zoTAyN_zg/company-logo_200_200/B4EZWOS_dzHgAI-/0/1741849098577?e=2147483647&v=beta&t=d90UkUA3jhGN2iQ-DiJ8zkyouZij3HVUZ8RljwRz-t8",
+      "local": "public/brands/loans24-logo.jpg",
+      "bytes": 5220
+    },
+    "cover": {
+      "source": "https://media.licdn.com/dms/image/v2/D4E3DAQEiRZ_lxcZYmw/image-scale_191_1128/B4EZXMW2FBHcAg-/0/1742890296504/loans24_cars24_financial_services_pvt_ltd_cover?e=2147483647&v=beta&t=yNtyiyCWitVdj4k6nP1z9So6LPNKZqw9SjRS8hPwRPY",
+      "local": "public/brands/loans24-cover.jpg",
+      "bytes": 44341
+    }
+  }
+}

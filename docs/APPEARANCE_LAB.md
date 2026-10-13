@@ -18,3 +18,15 @@ Keep one semantic content tree. Apply appearance through the root data-appearanc
 Use decorative, aria-hidden icons and CSS artwork to support labels; never substitute icons for meaningful text. Keep the same resume, evidence, social and prototype links. Respect reduced motion. Avoid animation of decoration by default. Maintain single-column cards on phones and at least 44px controls. Test all four variants at 320/390/768/1024/1440, both modes, story expansion, routes and persistence.
 
 Appearance choices are saved locally under nayana-appearance-v1. appearance_change is available to the existing no-op analytics adapter; no new data destination is enabled. The offline fallback retains its lightweight standalone recovery interface.
+
+## Brand-led revision — October 13
+
+Removed the hero sticker strip. BrandCover and BrandLogo share a mapping in src/lib/brand-assets.ts; they appear on work summaries, expanded briefs, standalone case pages and independent experiment cards. Official source pages are recorded alongside URLs. The imagery is illustrative company branding, not evidence of shipped UI or an endorsement. Blaze uses the verified withblazeapp LinkedIn identity rather than the unrelated blaze.ai company.
+
+All eight company logos and LinkedIn banners are verified and served locally from public/brands. SOURCES.json records their origin. Official banners retain their proportions, with portfolio labels below rather than over the company copy. Personal prototypes use contextual domain motifs; those are not company logos.
+
+The four themes now share layered atmosphere, translucent surfaces, inner highlights and blur fallbacks. Blue Blocks adds blueprint texture, dimensional studs and tile edges; Green Room uses sleeve borders, record labels and a translucent library rail; Chic uses issue labels, fine rules, serif cover titles and muted glass panels. Branding remains legible and unfiltered in every theme.
+
+New resume: Nayana K Product Works Resume.pdf. SHA-256: 3284dbc416b77969cbdf5c042204e5e0cc9782d78193c025100f7ff7915787a2. The public asset path remains unchanged for all CTAs.
+
+Validation: production build, lint and 16 tests passed. Expanded stories checked in all four themes at five viewport widths. Experiments checked in all four themes, both light/dark modes and five widths (40 combinations). No horizontal overflow; all six experiments retained. Standalone case page and mobile resume download verified. Downloaded PDF hash matches the user-provided file exactly.
