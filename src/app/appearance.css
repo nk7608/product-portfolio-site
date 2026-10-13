@@ -116,7 +116,6 @@ html[data-appearance=chic] .brand-logo{border-radius:3px;}
   html[data-appearance=blocks] .chapter-rail nav a{background:var(--glass);border:1.5px solid var(--border-strong);padding:12px;box-shadow:3px 3px 0 var(--border-strong);border-radius:8px;backdrop-filter:blur(14px);transition:transform .18s,box-shadow .18s;}
   html[data-appearance=blocks] .chapter-rail nav a:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--border-strong);}
   html[data-appearance=blocks] .chapter-rail nav a::after,html[data-appearance=chic] .chapter-rail nav a::after{display:none;}
-  html[data-appearance=blocks] .experiment-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
   html[data-appearance=chic] .welcome-section{grid-template-columns:1.2fr 1fr;gap:100px;}
   html[data-appearance=chic] .workspace{max-width:970px;}
   html[data-appearance=chic] .chapter-rail nav{border-block:1px solid var(--border);padding-block:8px;}

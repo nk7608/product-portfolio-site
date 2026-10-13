@@ -1,15 +1,18 @@
 "use client";
-import { ArrowUpRight, FlaskConical } from "lucide-react";
+import { useState } from "react";
+import { ArrowUpRight, ChevronDown, FlaskConical } from "lucide-react";
 import experiments from "../../content/experiments.json";
 import { BrandLogo, ProductCover } from "./brand-cover";
 import { TrackedLink } from "./analytics";
 
-export function ExperimentLab() {
-  return <div className="experiment-grid">{experiments.map((item,index) => <article className="experiment-card" key={item.id}>
+export function ExperimentLab({initial}:{initial?:number}) {
+  const [all,setAll]=useState(!initial);
+  const shown=all?experiments:experiments.slice(0,initial);
+  return <><div className="experiment-grid">{shown.map((item,index) => <article className="experiment-card" key={item.id}>
     <div className="experiment-meta"><span>EXP / {String(index+1).padStart(2,"0")}</span><span><FlaskConical size={13}/>{item.type}</span></div>
     <ProductCover id={item.id}/><div className="experiment-brand"><BrandLogo id={item.id}/><p className="experiment-name">{item.name}<span>{item.domain}</span></p></div>
     <h3>{item.title}</h3><p className="experiment-summary">{item.summary}</p>
     <p className="experiment-boundary">{item.boundary}</p>
     <div className="experiment-links">{item.links.map(link => <TrackedLink key={link.href} href={link.href} event="artifact_open" item={`${item.id}:${link.label}`}>{link.label}<ArrowUpRight size={14}/></TrackedLink>)}</div>
-  </article>)}</div>;
+  </article>)}</div>{!all&&<button type="button" className="show-more" onClick={()=>setAll(true)}>Show all {experiments.length} experiments<ChevronDown size={15} aria-hidden="true"/></button>}</>;
 }
