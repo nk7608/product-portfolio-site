@@ -12,6 +12,7 @@ import { ExperimentLab } from "./experiment-lab";
 import { MusicPlayer } from "./music-player";
 import { Github, Linkedin } from "./social-icons";
 import { ProductGlyph } from "./visual-cues";
+import { BrandLogo } from "./brand-cover";
 import life from "../../content/life.json";
 
 type Testimonial = {name:string;headline:string;date:string;relationship:string;quote:string;excerpt?:boolean};
@@ -34,6 +35,9 @@ function ProofPanel() {
 }
 function Availability() {
   return <div className="availability-strip" aria-label="Work location and availability"><span>Bangalore, India</span><span>Remote or hybrid</span><span>Europe & US work hours</span></div>;
+}
+function TrustStrip() {
+  return <div className="trust-strip"><span>Shipped with</span><div className="trust-logos">{["vidrush","opsmith","blaze","phasio"].map(id=><BrandLogo key={id} id={id}/>)}</div><p className="trust-names"><strong>Vidrush</strong> · <strong>Progress</strong> · <strong>Blaze</strong> · <strong>Phasio</strong></p></div>;
 }
 function Recommendation({item,featured=false}:{item:Testimonial;featured?:boolean}) {
   return <figure className={`quote-card ${featured?"is-featured":""}`}><blockquote>{item.quote}</blockquote><figcaption><strong>{item.name}</strong><span>{item.name.startsWith("Elaya") ? "Product Designer · Vidrush" : item.headline}</span><small>{item.relationship}{item.excerpt?" · excerpt":""}</small></figcaption></figure>;
@@ -99,7 +103,7 @@ export function PortfolioHome({projects,testimonials,writing,initialJourney}:{pr
   return <>
     <main id="main" className={`product-portfolio ${route?"is-guided":"is-browsing"}`}>
       {!route && <section className="welcome-section page-shell" aria-labelledby="welcome-title">
-        <div className="welcome-copy"><p className="hero-kicker"><span/>Nayana Kumari / AI Product Manager</p><h1 id="welcome-title">Behind every launch,<br/><em>a product decision.</em></h1><p className="welcome-description">I turn complex systems into products people use. Explore the problems, tradeoffs, and outcomes behind four years of building.</p><Availability/><div className="welcome-links"><TrackedLink href={resumeUrl} download={resumeFilename} event="resume_link" item="hero-resume" className="text-link"><FileText size={15}/>Download résumé<ArrowDown size={14}/></TrackedLink><TrackedLink href="mailto:nayanak872@gmail.com" event="contact_open" item="hero-email" className="text-link">Let’s talk<ArrowUpRight size={14}/></TrackedLink></div></div>
+        <div className="welcome-copy"><p className="hero-kicker"><span/>Nayana Kumari / AI Product Manager</p><h1 id="welcome-title">Behind every launch,<br/><em>a product decision.</em></h1><p className="welcome-description">I turn complex systems into products people use. Explore the problems, tradeoffs, and outcomes behind four years of building.</p><Availability/><TrustStrip/><div className="welcome-links"><TrackedLink href={resumeUrl} download={resumeFilename} event="resume_link" item="hero-resume" className="text-link"><FileText size={15}/>Download résumé<ArrowDown size={14}/></TrackedLink><TrackedLink href="mailto:nayanak872@gmail.com" event="contact_open" item="hero-email" className="text-link">Let’s talk<ArrowUpRight size={14}/></TrackedLink></div></div>
         <div className="route-picker" ref={startPanel} tabIndex={-1}><div className="panel-topline"><span><RouteIcon size={14}/> A quick introduction</span><span>OPTIONAL</span></div><h2>What brings you here?</h2><p>Pick a route. I’ll show you where to start.</p><div className="route-options">{(Object.keys(routes) as Route[]).map((key,index)=><button key={key} onClick={()=>start(key)}><span className="route-key">{String.fromCharCode(65+index)}</span><span><strong>{routes[key].label}</strong><small>{routes[key].description}</small></span><ArrowUpRight size={18}/></button>)}</div><a href="#brief" className="browse-link">Skip the intro. Browse everything <ArrowDown size={14}/></a><p className="route-note">No forms to fill. Your route only changes what comes first.</p></div>
       </section>}
 
