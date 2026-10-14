@@ -10,6 +10,8 @@ import { ExperienceList } from "./experience";
 import { ExperimentLab } from "./experiment-lab";
 import { usePrefs } from "./prefs";
 import { contact } from "./command-menu";
+import { CopyEmail } from "./copy-email";
+import { Footer } from "./footer";
 import experiments from "../../content/experiments.json";
 import life from "../../content/life.json";
 
@@ -17,12 +19,6 @@ type Testimonial = {name:string;headline:string;date:string;relationship:string;
 type WritingItem = {date:string;publication:string;title:string;topic:string;href:string};
 const titles: Record<Section,string> = { work:"Experience", experiments:"Experiments", writing:"Writing", evidence:"Recommendations", about:"Off the clock", contact:"Contact" };
 const personaNote: Record<string,string> = { hiring:"hiring for a product role", building:"building something", curious:"looking around", all:"everything" };
-
-function CopyEmail() {
-  const [copied,setCopied]=useState(false);
-  const track=useAnalytics();
-  return <button type="button" className="copy-btn link" onClick={()=>{navigator.clipboard?.writeText(contact.email).then(()=>{setCopied(true);setTimeout(()=>setCopied(false),2000);}).catch(()=>{location.href=`mailto:${contact.email}`;});track("contact_open",{item:"copy-email"});}}>{contact.email}{copied&&<small role="status">Copied</small>}</button>;
-}
 
 function Quotes({items}:{items:Testimonial[]}) {
   const [i,setI]=useState(0);
@@ -51,8 +47,19 @@ export function PortfolioHome({projects,testimonials,writing}:{projects:Project[
 
   // The hiring path opens the latest brief; a #work-slug link opens that one.
   useEffect(() => {
-    const sync = () => { const slug = location.hash.replace("#work-",""); setOpenSlug(professional.some(p=>p.slug===slug) ? slug : null); };
-    const frame = requestAnimationFrame(() => { sync(); if(!location.hash && ready) setOpenSlug(lenses[prefs.persona].open); });
+    // Any hash (margin index, header, ⌘K, shared link) reveals its section before scrolling to it.
+    const sync = () => {
+      const id = decodeURIComponent(location.hash.slice(1));
+      const slug = id.replace("work-","");
+      const role = id.startsWith("work-") && professional.some(p=>p.slug===slug);
+      if (role) setOpenSlug(slug);
+      const section = role ? "work" : (id.startsWith("exp-") ? "experiments" : id);
+      if ((["work","experiments","writing","evidence","about","contact"] as string[]).includes(section)) {
+        setExpanded(list => list.includes(section as Section) ? list : [...list, section as Section]);
+        requestAnimationFrame(() => requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ block: "start" })));
+      }
+    };
+    const frame = requestAnimationFrame(() => { if(location.hash) sync(); else if(ready) setOpenSlug(lenses[prefs.persona].open); });
     window.addEventListener("hashchange",sync);
     return () => { cancelAnimationFrame(frame); window.removeEventListener("hashchange",sync); };
   },[professional,prefs.persona,ready]);
@@ -78,7 +85,7 @@ export function PortfolioHome({projects,testimonials,writing}:{projects:Project[
       <li><span>Around town</span><span>Running, coffee and good meals in {life.pitstops.join(", ")}.</span></li>
       <li><span>Side quest</span><span>Scope Runner, a tiny game about scope creep. <button type="button" className="text-btn" aria-expanded={game} onClick={()=>{setGame(!game);if(!game)track("game_open",{from:"about"});}}>{game?"Close":"Play"}</button>{game&&<div className="game-embed"><iframe title="Scope Runner, an optional game" sandbox="allow-scripts" referrerPolicy="no-referrer" src={`/offline.html?play=1&theme=${prefs.theme==="ink"||prefs.theme==="night"?"dark":"light"}`} loading="lazy"/></div>}</span></li>
     </ul></div></>,
-    contact: <>{head("contact")}<div className="section-body" id="contact-body"><p className="contact-line">Email is fastest: <CopyEmail/>. I reply within a day or two.</p><div className="contact-actions"><TrackedLink className="btn" href={`mailto:${contact.email}`} event="contact_open" item="contact-email">Write an email</TrackedLink><TrackedLink className="btn btn-quiet" href={contact.resume} download="Nayana-Kumari-AI-Product-Manager-Resume.pdf" event="resume_link" item="contact-resume">Résumé (PDF)</TrackedLink><TrackedLink className="link" href={contact.linkedin} event="contact_open" item="contact-linkedin">LinkedIn ↗</TrackedLink><TrackedLink className="link" href={contact.github} item="contact-github">GitHub ↗</TrackedLink><TrackedLink className="link" href="https://x.com/uncommonnayana" item="contact-x">X ↗</TrackedLink></div></div></>,
+    contact: <>{head("contact")}<div className="section-body" id="contact-body"><p className="contact-line">Email is fastest: <CopyEmail item="contact-copy-email"/>. I reply within a day or two.</p><div className="contact-actions"><TrackedLink className="btn" href={`mailto:${contact.email}`} event="contact_open" item="contact-email">Write an email</TrackedLink><TrackedLink className="btn btn-quiet" href={contact.resume} download="Nayana-Kumari-AI-Product-Manager-Resume.pdf" event="resume_link" item="contact-resume">Résumé (PDF)</TrackedLink><TrackedLink className="link" href={contact.linkedin} event="contact_open" item="contact-linkedin">LinkedIn ↗</TrackedLink><TrackedLink className="link" href={contact.github} item="contact-github">GitHub ↗</TrackedLink><TrackedLink className="link" href="https://x.com/uncommonnayana" item="contact-x">X ↗</TrackedLink></div></div></>,
   };
 
   return <>
@@ -89,7 +96,7 @@ export function PortfolioHome({projects,testimonials,writing}:{projects:Project[
         <h1 id="hero-title">Nayana Kumari</h1>
         <p className="lede">Product manager with an engineering background. I take AI and B2B products from a fuzzy problem to a shipped, measured result, most recently as <strong>founding PM at Vidrush</strong>.</p>
         <p className="status"><span className="open">Open to PM roles</span><span>Bangalore</span><span>Remote or hybrid</span><span>Europe & US hours</span></p>
-        <p className="hero-links"><CopyEmail/><TrackedLink className="link" href={contact.resume} download="Nayana-Kumari-AI-Product-Manager-Resume.pdf" event="resume_link" item="hero-resume">Résumé</TrackedLink><TrackedLink className="link" href={contact.linkedin} event="contact_open" item="hero-linkedin">LinkedIn</TrackedLink><TrackedLink className="link" href={contact.github} item="hero-github">GitHub</TrackedLink></p>
+        <p className="hero-links"><CopyEmail item="hero-copy-email"/><TrackedLink className="link" href={contact.resume} download="Nayana-Kumari-AI-Product-Manager-Resume.pdf" event="resume_link" item="hero-resume">Résumé</TrackedLink><TrackedLink className="link" href={contact.linkedin} event="contact_open" item="hero-linkedin">LinkedIn</TrackedLink><TrackedLink className="link" href={contact.github} item="hero-github">GitHub</TrackedLink></p>
         <div className="proof" aria-label="Selected outcomes"><div><b>10K → 80K</b><span>weekly product access</span></div><div><b>$4.2M → $6M</b><span>ARR supported</span></div><div><b>MVP → 3 pilots</b><span>in four months</span></div></div>
         <p className="proof-note">Team outcomes I contributed to. Each role explains how they were measured.</p>
         {ready&&<p className="path-note">Arranged for <b>{personaNote[prefs.persona]}</b>: {order.filter(s=>chosen.has(s)).map(s=>titles[s].toLowerCase()).join(", ")} first.<button type="button" className="text-btn" onClick={()=>open("intro")}>Change</button><button type="button" className="text-btn" onClick={()=>open("controls")}>Settings</button></p>}
@@ -97,6 +104,6 @@ export function PortfolioHome({projects,testimonials,writing}:{projects:Project[
 
       {order.map(s=><section key={s} id={s} className={`section ${isOpen(s)?"":"is-collapsed"}`} aria-labelledby={`${s}-title`}>{blocks[s]}</section>)}
     </main>
-    <footer className="site-footer"><span>© {new Date().getFullYear()} Nayana Kumari</span><span>Built by hand in Bangalore. Updated October 2026.</span><button type="button" className="text-btn spacer" onClick={()=>open("controls")}>Settings</button><button type="button" className="text-btn" onClick={()=>open("command")}>⌘K menu</button></footer>
+    <Footer/>
   </>;
 }

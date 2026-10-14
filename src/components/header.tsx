@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Command, SlidersHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { usePrefs } from "./prefs";
+import { HashLink } from "./hash-link";
 
 /** Bangalore time, rendered after mount so server and client markup match. */
 function Clock() {
@@ -28,8 +29,8 @@ export function Header() {
       <Link href="/" className="wordmark">Nayana Kumari</Link>
       <Clock />
       <nav aria-label="Main">
-        <Link href="/#work" className="hide-sm">Work</Link>
-        <Link href="/#contact" className="hide-sm">Contact</Link>
+        <HashLink id="work" className="hide-sm">Work</HashLink>
+        <HashLink id="contact" className="hide-sm">Contact</HashLink>
         <button type="button" className="cmd-btn" onClick={() => open("command")} aria-label="Open command menu"><Command size={14} aria-hidden="true" /><kbd>K</kbd></button>
         <button type="button" className="icon-btn" onClick={() => open("controls")} aria-label="Display and reading settings"><SlidersHorizontal size={16} /></button>
       </nav>

@@ -16,7 +16,7 @@ const prepaint = `try{var p=JSON.parse(localStorage.getItem(${JSON.stringify(pre
 
 export default async function RootLayout({children}:{children:React.ReactNode}) {
   const roles = (await getProjects()).filter(p => ["vidrush","opsmith","blaze","phasio"].includes(p.slug)).map(p => ({ slug: p.slug, label: `${p.role.split(" · ")[0]} · ${p.title}` }));
-  return <html lang="en" data-theme="paper" data-mode="light" data-accent="rust" data-font="sans" data-size="m" data-density="skim" data-motion="auto" className={`${sans.variable} ${serif.variable}`} suppressHydrationWarning>
+  return <html lang="en" data-theme="paper" data-mode="light" data-accent="rust" data-font="sans" data-size="m" data-density="skim" data-motion="auto" data-scroll-behavior="smooth" className={`${sans.variable} ${serif.variable}`} suppressHydrationWarning>
     <head><script dangerouslySetInnerHTML={{__html:prepaint}}/></head>
     <body><Providers roles={roles}><a href="#main" className="skip-link">Skip to content</a><Header/>{children}</Providers></body>
   </html>;

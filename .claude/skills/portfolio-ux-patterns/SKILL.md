@@ -19,6 +19,7 @@ One page, one column, one story: **who I am → what I shipped and why → how I
 | 5 | Recommendations | One quote with ← → and "1 / 5" | The other four |
 | 6 | Off the clock | Four lines: Listening to (Play), Reading, Around town, Side quest (Play) | YouTube player / Scope Runner open inline |
 | 7 | Contact | "Email is fastest" + copy, Write an email, Résumé, LinkedIn, GitHub, X | — |
+| — | Footer (every page) | Name · role · open-to-work; Contact / Pages / Your view columns; © and "Your settings stay in this browser." | Section links reveal collapsed sections |
 
 Order of 2–6 comes from the persona (see `portfolio-onboarding-journeys`); sections the visitor didn't ask for collapse to a header with "Show". On ≥1100px a numbered index of the sections sits in the left margin.
 
@@ -46,11 +47,12 @@ Oct 14, 2026: phone 2,856–3,704px / 282–437 words; desktop 2,161–2,742px /
 
 ## Before finishing a change
 
-1. `pnpm typecheck && pnpm lint && pnpm test && pnpm build`.
-2. Run the measure script; budgets hold for every persona.
-3. Screenshot 390px and 1440px in Paper and Ink, with a row open.
-4. Read the hero aloud as a recruiter with 15 seconds: role, seniority, outcomes, availability, how to reach — all visible?
-5. Check `references/pitfalls.md`.
+1. `pnpm typecheck && pnpm lint && pnpm test && pnpm build` (if typecheck complains about `.next/types/* 2.ts`, delete `.next`).
+2. Run `scripts/e2e.mjs` against dev and against `pnpm start` — 101 checks covering intro, links, settings, ⌘K, rows, sections, embeds, footer, pages and phone. Run it twice on production; timing bugs only show there.
+3. Run the measure script; budgets hold for every persona.
+4. Screenshot 390px and 1440px in Paper and Ink, with a row open.
+5. Read the hero aloud as a recruiter with 15 seconds: role, seniority, outcomes, availability, how to reach — all visible?
+6. Check `references/pitfalls.md`.
 
 ## References
 - `references/borrow.md` — patterns borrowed (Mobbin/Firecrawl links) and where they landed.

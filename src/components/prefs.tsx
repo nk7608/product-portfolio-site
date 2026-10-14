@@ -24,7 +24,8 @@ export function PrefsProvider({ children }: { children: ReactNode }) {
     // A shared link (?for=hiring, or the retired ?tour=) sets the persona and skips the intro.
     const fromUrl = readLens(window.location.search);
     if (fromUrl !== "all" || /[?&](for|tour)=/.test(window.location.search)) next = parsePrefs({ ...next, persona: fromUrl, interests: fromUrl !== next.persona ? undefined : next.interests, onboarded: true });
-    const frame = requestAnimationFrame(() => { setPrefs(next); setReady(true); if (!next.onboarded) setPanel("intro"); });
+    // The intro belongs to the homepage; a first visit straight to a case page is never interrupted.
+    const frame = requestAnimationFrame(() => { setPrefs(next); setReady(true); if (!next.onboarded && window.location.pathname === "/") setPanel("intro"); });
     apply(next);
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     const onScheme = () => setPrefs(current => { apply(current); return current; });

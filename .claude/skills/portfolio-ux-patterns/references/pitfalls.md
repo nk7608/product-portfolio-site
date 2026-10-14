@@ -35,3 +35,7 @@ Each of these happened on this site. The "seen as" line says how to recognise it
 20. **A guided tour as the only personalisation.** Personalisation now arranges the normal page and says so ("Arranged for … Change").
 21. **Controls with no reset or no visible entry point.** Every control has a visible button, a ⌘K entry where useful, and "Reset to default".
 22. **Font variables on `<body>` while `[data-font]` lives on `<html>`.** The serif setting silently did nothing until the font classes moved to `<html>`.
+23. **Client-side links to a hash don't fire `hashchange`.** Next `<Link href="/#work">` uses pushState, so a collapsed section never opened. Use `HashLink` (sets `location.hash` on the homepage).
+24. **Resetting dialog state in an effect + rAF.** Closing and reopening ⌘K within one frame cancelled the reset, leaving old search text; the intro showed the previous choice for a frame. Mount dialog contents only while open so state initialises fresh (`Sheet` does this).
+25. **Intro on deep links.** A first visit straight to `/work/...` was interrupted by the intro; it now only opens on `/`.
+26. **Footer filler.** "Built by hand…" said nothing useful; the footer now carries contact, pages and the visitor's controls.
