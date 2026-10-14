@@ -1,6 +1,6 @@
 # Nayana Kumari — AI Product Portfolio
 
-A light-first, Autosend-inspired portfolio built with Next.js App Router, TypeScript, Tailwind CSS 4, Motion, Radix, local MDX, Zod, and next-themes.
+A minimal, personalised product-manager portfolio built with Next.js App Router, TypeScript, Tailwind CSS 4, Radix, local MDX and Zod. Visitors pick who they are in a short intro and get the same one-column page arranged for them, with reader-style settings (theme, accent, typeface, size, detail, motion) and a ⌘K menu.
 
 ## Run and validate
 
@@ -8,7 +8,7 @@ Use Node 22+ and pnpm. Start development with pnpm dev. Run pnpm typecheck, pnpm
 
 ## Architecture
 
-The server homepage discovers and validates project MDX, then passes it to PortfolioHome. The client component renders the hero, proof panel, two one-open-at-a-time featured stories, compact shipped work, references, independent work, about, contact, and a compact writing footer. Shared providers supply theme, reduced-motion handling, and a vendor-neutral analytics adapter.
+The server homepage loads and validates project MDX and passes it to `PortfolioHome`, which renders the hero and six sections (Experience, Experiments, Writing, Recommendations, Off the clock, Contact) as numbered rows that open in place. `PrefsProvider` holds visitor preferences (`src/lib/prefs.ts`), applied before paint by an inline script in `layout.tsx`. The intro, Settings and ⌘K menu are native dialogs. Design and UX rules live in `.claude/skills/`.
 
 Static work routes remain available at /work/[slug]. The homepage provides the primary case-study experience through inline progressive disclosure.
 

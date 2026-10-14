@@ -1,157 +1,109 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { motion } from "motion/react";
-import { useTheme } from "next-themes";
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, Check, ChevronDown, Coffee, FileText, FlaskConical, GitBranch, Mail, MapPin, Play, Route as RouteIcon, X } from "lucide-react";
+import { Fragment, useEffect, useMemo, useState } from "react";
+import { ChevronLeft, ChevronRight, Play, X } from "lucide-react";
 import type { Project } from "@/lib/schema";
-import { chapters, routes, readJourney, journeyUrl, type Chapter, type Route } from "@/lib/journey";
+import { lenses, type Section } from "@/lib/lens";
+import { interests, sectionOrder } from "@/lib/prefs";
 import { TrackedLink, useAnalytics } from "./analytics";
-import { StoryDisclosure } from "./work-story";
+import { ExperienceList } from "./experience";
 import { ExperimentLab } from "./experiment-lab";
-import { MusicPlayer } from "./music-player";
-import { Github, Linkedin } from "./social-icons";
-import { ProductGlyph } from "./visual-cues";
-import { BrandLogo } from "./brand-cover";
+import { usePrefs } from "./prefs";
+import { contact } from "./command-menu";
+import { CopyEmail } from "./copy-email";
+import { Footer } from "./footer";
+import experiments from "../../content/experiments.json";
 import life from "../../content/life.json";
 
 type Testimonial = {name:string;headline:string;date:string;relationship:string;quote:string;excerpt?:boolean};
 type WritingItem = {date:string;publication:string;title:string;topic:string;href:string};
-const resumeUrl = "/assets/nayana-kumari-ai-product-manager-resume.pdf";
-const resumeFilename = "Nayana-Kumari-AI-Product-Manager-Resume.pdf";
-const allChapters:Chapter[] = ["brief","journey","work","experiments","evidence","about"];
-const careerContext:Record<string,{verb:string}> = {
-  phasio:{verb:"Make complex choices simpler"},
-  blaze:{verb:"Connect usage to growth"},
-  opsmith:{verb:"Find a path from discovery to pilot"},
-  vidrush:{verb:"Scale the product and its economics"},
-};
+const titles: Record<Section,string> = { work:"Experience", experiments:"Experiments", writing:"Writing", evidence:"Recommendations", about:"Off the clock", contact:"Contact" };
+const personaNote: Record<string,string> = { hiring:"hiring for a product role", building:"building something", curious:"looking around", all:"everything" };
 
-function ChapterHeading({index,label,title,children}:{index:string;label:string;title:string;children:React.ReactNode}) {
-  return <div className="chapter-heading"><p className="section-label"><span>{index}</span> / {label}</p><h2>{title}</h2><p>{children}</p></div>;
-}
-function ProofPanel() {
-  return <div className="proof-panel" aria-label="Selected outcomes">{[["10K → 80K","weekly product access"],["$4.2M → $6M","ARR supported in three months"],["MVP → 3 pilots","delivered in four months"]].map(([value,label]) => <div className="proof-item" key={value}><strong>{value}</strong><span>{label}</span></div>)}</div>;
-}
-function Availability() {
-  return <div className="availability-strip" aria-label="Work status, location and availability"><span className="is-open">Open to work</span><span>Bangalore, India</span><span>Remote or hybrid</span><span>Europe & US hours</span></div>;
-}
-function TrustStrip() {
-  return <div className="trust-strip"><span>Shipped with</span><div className="trust-logos">{["vidrush","opsmith","blaze","phasio"].map(id=><BrandLogo key={id} id={id}/>)}</div><p className="trust-names"><strong>Vidrush</strong> · <strong>Progress</strong> · <strong>Blaze</strong> · <strong>Phasio</strong></p></div>;
-}
-function Recommendation({item,featured=false}:{item:Testimonial;featured?:boolean}) {
-  const [open,setOpen]=useState(false);
-  const long=!featured&&item.quote.length>200;
-  return <figure className={`quote-card ${featured?"is-featured":""} ${long&&!open?"is-clamped":""}`}><blockquote>{item.quote}</blockquote>{long&&<button type="button" className="quote-more" aria-expanded={open} onClick={()=>setOpen(!open)}>{open?"Show less":"Read more"}</button>}<figcaption><strong>{item.name}</strong><span>{item.name.startsWith("Elaya") ? "Product Designer · Vidrush" : item.headline}</span><small>{item.relationship}{item.excerpt?" · excerpt":""}</small></figcaption></figure>;
+function Quotes({items}:{items:Testimonial[]}) {
+  const [i,setI]=useState(0);
+  const q=items[i];
+  return <figure className="quote">
+    <blockquote>“{q.quote}”</blockquote>
+    <figcaption><b>{q.name}</b> · {q.name.startsWith("Elaya")?"Product Designer, Vidrush":q.headline.split("|")[0].trim()} · {q.relationship}</figcaption>
+    <div className="quote-nav"><button type="button" className="icon-btn" aria-label="Previous recommendation" onClick={()=>setI((i-1+items.length)%items.length)}><ChevronLeft size={15}/></button><button type="button" className="icon-btn" aria-label="Next recommendation" onClick={()=>setI((i+1)%items.length)}><ChevronRight size={15}/></button><span className="num" aria-live="polite">{i+1} / {items.length}</span></div>
+  </figure>;
 }
 
-export function PortfolioHome({projects,testimonials,writing,initialJourney}:{projects:Project[];testimonials:Testimonial[];writing:WritingItem[];initialJourney:{route:Route|null;chapter:Chapter}}) {
+export function PortfolioHome({projects,testimonials,writing}:{projects:Project[];testimonials:Testimonial[];writing:WritingItem[]}) {
   const track = useAnalytics();
-  const { resolvedTheme } = useTheme();
-  const [route,setRoute] = useState<Route|null>(initialJourney.route);
-  const [chapter,setChapter] = useState<Chapter>(initialJourney.chapter);
+  const { prefs, ready, open } = usePrefs();
   const [openSlug,setOpenSlug] = useState<string|null>(null);
-  const [gameOpen,setGameOpen] = useState(false);
-  const [navOpen,setNavOpen] = useState(false);
-  const tourTitle = useRef<HTMLHeadingElement>(null);
-  const startPanel = useRef<HTMLDivElement>(null);
+  const [expanded,setExpanded] = useState<Section[]>([]);
+  const [song,setSong] = useState(false);
+  const [game,setGame] = useState(false);
+  const [active,setActive] = useState<Section>("work");
   const professional = useMemo(() => ["vidrush","opsmith","blaze","phasio"].map(slug => projects.find(p=>p.slug===slug)).filter(Boolean) as Project[],[projects]);
-  const quotes = useMemo(() => ["Elaya (Ali) Moosavi","Sudharshan Raman","Noah Morris"].map(name=>testimonials.find(t=>t.name===name)).filter(Boolean) as Testimonial[],[testimonials]);
-  const steps:Chapter[] = route ? routes[route].steps : allChapters;
-  const currentIndex = steps.indexOf(chapter);
+  const quotes = useMemo(() => ["Elaya (Ali) Moosavi","Sudharshan Raman","Noah Morris","Amit Mishra","Lauren Rothwell"].map(name=>testimonials.find(t=>t.name===name)).filter(Boolean) as Testimonial[],[testimonials]);
+  const order = sectionOrder(prefs.persona, prefs.interests);
+  const orderKey = order.join();
+  const chosen = new Set<Section>(interests.filter(item => prefs.interests.includes(item.id)).map(item => item.section));
+  const isOpen = (s:Section) => !ready || s==="contact" || chosen.has(s) || expanded.includes(s);
 
+  // The hiring path opens the latest brief; a #work-slug link opens that one.
   useEffect(() => {
+    // Any hash (margin index, header, ⌘K, shared link) reveals its section before scrolling to it.
     const sync = () => {
-      const next = readJourney(window.location.search);
-      setRoute(next.route);
-      setChapter(next.chapter);
-      const slug = window.location.hash.replace("#work-", "");
-      setOpenSlug(professional.some(p=>p.slug===slug) ? slug : null);
+      const id = decodeURIComponent(location.hash.slice(1));
+      const slug = id.replace("work-","");
+      const role = id.startsWith("work-") && professional.some(p=>p.slug===slug);
+      if (role) setOpenSlug(slug);
+      const section = role ? "work" : (id.startsWith("exp-") ? "experiments" : id);
+      if ((["work","experiments","writing","evidence","about","contact"] as string[]).includes(section)) {
+        setExpanded(list => list.includes(section as Section) ? list : [...list, section as Section]);
+        requestAnimationFrame(() => requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ block: "start" })));
+      }
     };
-    const frame = requestAnimationFrame(sync);
-    window.addEventListener("popstate",sync);
+    const frame = requestAnimationFrame(() => { if(location.hash) sync(); else if(ready) setOpenSlug(lenses[prefs.persona].open); });
     window.addEventListener("hashchange",sync);
-    return () => {cancelAnimationFrame(frame);window.removeEventListener("popstate",sync);window.removeEventListener("hashchange",sync);};
-  },[professional,initialJourney.route,initialJourney.chapter]);
+    return () => { cancelAnimationFrame(frame); window.removeEventListener("hashchange",sync); };
+  },[professional,prefs.persona,ready]);
 
-  function navigate(next:Chapter,nextRoute:Route|null=route) {
-    setRoute(nextRoute);setChapter(next);setNavOpen(false);
-    window.history.pushState(null,"",journeyUrl(nextRoute,next));
-    track(nextRoute?"journey_step":"journey_exit",{route:nextRoute??"full",chapter:next});
-    requestAnimationFrame(() => {
-      if(nextRoute) {tourTitle.current?.focus({preventScroll:true});window.scrollTo({top:0,behavior:"instant"});}
-      else {const id=next==="experiments"?"independent-work":next==="evidence"?"references":next;document.getElementById(id)?.scrollIntoView({behavior:"instant"});}
-    });
-  }
-  function start(next:Route) {
-    track("journey_start",{route:next});navigate(routes[next].steps[0],next);
-  }
-  function openStory(slug:string) {
-    const next = openSlug===slug ? null : slug;
-    setOpenSlug(next);
-    track(next?"case_expand":"case_collapse",{project:slug});
-    window.history.replaceState(null,"",`${window.location.pathname}${window.location.search}${next?`#work-${next}`:"#work"}`);
-  }
-  function followCareer(slug:string) {
-    navigate("work");setOpenSlug(slug);
-    window.history.replaceState(null,"",`${window.location.pathname}${window.location.search}#work-${slug}`);
-    requestAnimationFrame(()=>document.getElementById(`work-${slug}`)?.scrollIntoView({behavior:"instant",block:"start"}));
-  }
-  function restart() {
-    navigate("brief",null);
-    requestAnimationFrame(()=>{startPanel.current?.focus({preventScroll:true});window.scrollTo({top:0,behavior:"instant"});});
-  }
+  // The margin index highlights the section in view.
+  useEffect(() => {
+    const observer = new IntersectionObserver(entries => { for (const e of entries) if (e.isIntersecting) setActive(e.target.id as Section); }, { rootMargin: "-30% 0px -60% 0px" });
+    document.querySelectorAll(".section").forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  },[orderKey]);
+
+  const toggleBrief = (slug:string) => { const next = openSlug===slug ? null : slug; setOpenSlug(next); track(next?"case_expand":"case_collapse",{project:slug}); };
+  const head = (s:Section, count?:number) => <div className="section-head"><h2 id={`${s}-title`}>{titles[s]}</h2>{count!==undefined&&<span className="count">{String(count).padStart(2,"0")}</span>}{s!=="contact"&&ready&&!chosen.has(s)&&<button type="button" className="toggle" aria-expanded={isOpen(s)} aria-controls={`${s}-body`} onClick={()=>setExpanded(list=>list.includes(s)?list.filter(x=>x!==s):[...list,s])}>{isOpen(s)?"Hide":"Show"}</button>}</div>;
+
+  const blocks: Record<Section,React.ReactNode> = {
+    work: <>{head("work",professional.length)}<div className="section-body" id="work-body"><p className="section-intro">Newest first. Open a role for the problem, the approach and what changed.</p><ExperienceList projects={professional} places={life.journey} openSlug={openSlug} onToggle={toggleBrief}/></div></>,
+    experiments: <>{head("experiments",experiments.length)}<div className="section-body" id="experiments-body"><p className="section-intro">Independent case studies and prototypes, built to learn. Not shipped company work.</p><ExperimentLab/></div></>,
+    writing: <>{head("writing",writing.length)}<div className="section-body" id="writing-body"><ol className="rows">{writing.map((item,i)=><li className="row" key={item.href}><TrackedLink className="row-btn" href={item.href} event="article_click" item={item.title}><span className="n">{String(i+1).padStart(2,"0")}</span><span className="t"><b>{item.title}</b></span><span className="y">{item.publication.split(" · ")[0]} · {item.date.slice(-4)}</span><span className="chev" aria-hidden="true">↗</span></TrackedLink></li>)}</ol></div></>,
+    evidence: <>{head("evidence",quotes.length)}<div className="section-body" id="evidence-body"><Quotes items={quotes}/></div></>,
+    about: <>{head("about")}<div className="section-body" id="about-body"><ul className="facts">
+      <li><span>Listening to</span><span>Fix You, Coldplay. For the piano intro. <button type="button" className="text-btn" aria-expanded={song} onClick={()=>{setSong(!song);if(!song)track("music_play",{track:"fix-you"});}}>{song?<><X size={13}/>Stop</>:<><Play size={13}/>Play</>}</button>{song&&<iframe title="Fix You by Coldplay on YouTube" src="https://www.youtube-nocookie.com/embed/k4V3Mo61fJM?autoplay=1" allow="autoplay; encrypted-media" referrerPolicy="strict-origin-when-cross-origin"/>}</span></li>
+      <li><span>Reading</span><span>{life.books.map((b,i)=><Fragment key={b.title}>{i>0&&"; next up, "}<TrackedLink className="link" href={b.href} item={`book:${b.title}`}>{b.title}</TrackedLink> by {b.author}</Fragment>)}.</span></li>
+      <li><span>Around town</span><span>Running, coffee and good meals in {life.pitstops.join(", ")}.</span></li>
+      <li><span>Side quest</span><span>Scope Runner, a tiny game about scope creep. <button type="button" className="text-btn" aria-expanded={game} onClick={()=>{setGame(!game);if(!game)track("game_open",{from:"about"});}}>{game?"Close":"Play"}</button>{game&&<div className="game-embed"><iframe title="Scope Runner, an optional game" sandbox="allow-scripts" referrerPolicy="no-referrer" src={`/offline.html?play=1&theme=${prefs.theme==="ink"||prefs.theme==="night"?"dark":"light"}`} loading="lazy"/></div>}</span></li>
+    </ul></div></>,
+    contact: <>{head("contact")}<div className="section-body" id="contact-body"><p className="contact-line">Email is fastest: <CopyEmail item="contact-copy-email"/>. I reply within a day or two.</p><div className="contact-actions"><TrackedLink className="btn" href={`mailto:${contact.email}`} event="contact_open" item="contact-email">Write an email</TrackedLink><TrackedLink className="btn btn-quiet" href={contact.resume} download="Nayana-Kumari-AI-Product-Manager-Resume.pdf" event="resume_link" item="contact-resume">Résumé (PDF)</TrackedLink><TrackedLink className="link" href={contact.linkedin} event="contact_open" item="contact-linkedin">LinkedIn ↗</TrackedLink><TrackedLink className="link" href={contact.github} item="contact-github">GitHub ↗</TrackedLink><TrackedLink className="link" href="https://x.com/uncommonnayana" item="contact-x">X ↗</TrackedLink></div></div></>,
+  };
 
   return <>
-    <main id="main" className={`product-portfolio ${route?"is-guided":"is-browsing"}`}>
-      {!route && <section className="welcome-section page-shell" aria-labelledby="welcome-title">
-        <div className="welcome-copy"><p className="hero-kicker"><span/>Nayana Kumari / AI Product Manager</p><h1 id="welcome-title">Behind every launch,<br/><em>a product decision.</em></h1><p className="welcome-description">Product manager with an engineering background. Four years across AI video, DevOps, CRM and manufacturing, from first spec to measured results.</p><Availability/><TrustStrip/><div className="welcome-links"><TrackedLink href={resumeUrl} download={resumeFilename} event="resume_link" item="hero-resume" className="text-link"><FileText size={15}/>Résumé (PDF)<ArrowDown size={14}/></TrackedLink><TrackedLink href="mailto:nayanak872@gmail.com" event="contact_open" item="hero-email" className="text-link">Email<ArrowUpRight size={14}/></TrackedLink></div></div>
-        <div className="route-picker" ref={startPanel} tabIndex={-1}><div className="panel-topline"><span><RouteIcon size={14}/> Guided tour</span><span>~3 min</span></div><h2>Short on time?</h2><p>Pick a path and I’ll show the most relevant parts first.</p><div className="route-options">{(Object.keys(routes) as Route[]).map((key,index)=><button key={key} onClick={()=>start(key)}><span className="route-key">{String.fromCharCode(65+index)}</span><span><strong>{routes[key].label}</strong><small>{routes[key].description}</small></span><ArrowUpRight size={18}/></button>)}</div><a href="#brief" className="browse-link">Or just scroll <ArrowDown size={14}/></a></div>
-      </section>}
+    <main id="main" className="page">
+      <nav className="margin-index" aria-label="On this page"><ol>{order.map((s,i)=><li key={s}><a href={`#${s}`} aria-current={active===s}><span>{String(i+1).padStart(2,"0")}</span>{titles[s]}</a></li>)}</ol></nav>
 
-      {route && <div className="tour-bar page-shell"><div><p className="section-label">Guided introduction / {routes[route].label}</p><h1 ref={tourTitle} tabIndex={-1}>{chapters[chapter].question}</h1></div><button className="button button-secondary" onClick={()=>navigate(chapter,null)}>View full portfolio<X size={14}/></button><div className="tour-progress" role="progressbar" aria-label="Journey progress" aria-valuemin={1} aria-valuemax={steps.length} aria-valuenow={currentIndex+1}><span style={{width:`${(currentIndex+1)/steps.length*100}%`}}/></div></div>}
+      <section className="hero" aria-labelledby="hero-title">
+        <h1 id="hero-title">Nayana Kumari</h1>
+        <p className="lede">Product manager with an engineering background. I take AI and B2B products from a fuzzy problem to a shipped, measured result, most recently as <strong>founding PM at Vidrush</strong>.</p>
+        <p className="status"><span className="open">Open to PM roles</span><span>Bangalore</span><span>Remote or hybrid</span><span>Europe & US hours</span></p>
+        <p className="hero-links"><CopyEmail item="hero-copy-email"/><TrackedLink className="link" href={contact.resume} download="Nayana-Kumari-AI-Product-Manager-Resume.pdf" event="resume_link" item="hero-resume">Résumé</TrackedLink><TrackedLink className="link" href={contact.linkedin} event="contact_open" item="hero-linkedin">LinkedIn</TrackedLink><TrackedLink className="link" href={contact.github} item="hero-github">GitHub</TrackedLink></p>
+        <div className="proof" aria-label="Selected outcomes"><div><b>10K → 80K</b><span>weekly product access</span></div><div><b>$4.2M → $6M</b><span>ARR supported</span></div><div><b>MVP → 3 pilots</b><span>in four months</span></div></div>
+        <p className="proof-note">Team outcomes I contributed to. Each role explains how they were measured.</p>
+        {ready&&<p className="path-note">Arranged for <b>{personaNote[prefs.persona]}</b>: {order.filter(s=>chosen.has(s)).map(s=>titles[s].toLowerCase()).join(", ")} first.<button type="button" className="text-btn" onClick={()=>open("intro")}>Change</button><button type="button" className="text-btn" onClick={()=>open("controls")}>Settings</button></p>}
+      </section>
 
-      <div className="workspace page-shell">
-        <aside className="chapter-rail" data-expanded={navOpen} aria-label="Portfolio chapters">{route&&<button className="chapter-mobile-toggle" aria-expanded={navOpen} aria-controls="chapter-navigation" onClick={()=>setNavOpen(!navOpen)}>Your route · {currentIndex+1} of {steps.length}<span>{navOpen?"Hide steps":"See all steps"}<ChevronDown size={14}/></span></button>}<p className="section-label">{route?"Your route":"Explore the work"}</p><nav id="chapter-navigation">{steps.map((key,index)=><a key={key} href={journeyUrl(route,key)} aria-current={chapter===key&&route?"step":undefined} onClick={route?e=>{e.preventDefault();navigate(key);}:undefined}><span className="chapter-node">{route&&index<currentIndex?<Check size={12}/>:String(index+1).padStart(2,"0")}</span><span><strong>{chapters[key].label}</strong><small>{chapters[key].hint}</small></span></a>)}</nav><div className="rail-note"><span className="status-dot"/>Open to work · PM roles<a href="#contact">Get in touch <ArrowUpRight size={12}/></a></div>{route&&<button className="text-link" onClick={restart}><ArrowLeft size={13}/>Choose another route</button>}</aside>
-
-        <div className="chapter-stack">
-          <section className="chapter-section brief-section" id="brief" hidden={Boolean(route&&chapter!=="brief")}>
-            <ChapterHeading index={String(steps.indexOf("brief")+1).padStart(2,"0")} label="Product brief" title="The short version.">Who I am, where I help, and a few numbers from the work.</ChapterHeading>
-            <div className="brief-document"><div className="panel-topline"><span><FileText size={14}/> NAYANA / PRODUCT BRIEF</span><span>4 YEARS · 0→1</span></div><h3>Engineer turned product manager. Most at home early, when the problem is fuzzy and the team needs evidence, priorities and a clear spec.</h3><div className="brief-facts"><div><span>Background</span><strong>Software engineering → product management</strong></div><div><span>Day to day</span><strong>Discovery, specs, delivery, pricing, and growth</strong></div><div><span>Domains</span><strong>AI video · DevOps AI · campaign CRM · manufacturing SaaS</strong></div></div></div>
-            <ProofPanel/><p className="metric-footnote">Team outcomes I contributed to. Definitions are in each product brief.</p>
-          </section>
-
-          <section className="chapter-section" id="journey" hidden={Boolean(route&&chapter!=="journey")}>
-            <ChapterHeading index={String(steps.indexOf("journey")+1).padStart(2,"0")} label="Career flow" title="One role builds on the next.">Four roles, oldest first. Tap one to open its brief.</ChapterHeading>
-            <ol className="career-flow">{[...professional].reverse().map((project,index)=><li key={project.slug}><div className="flow-marker"><span>{String(index+1).padStart(2,"0")}</span></div><button className="career-step" onClick={()=>followCareer(project.slug)}><div className="career-meta"><span>{project.period}</span><span>{project.domain}</span></div><div className="career-title"><ProductGlyph id={project.slug}/><h3>{project.title}</h3><ArrowUpRight size={18}/></div><p className="career-role">{project.role}</p><h4>{careerContext[project.slug].verb}</h4><div className="career-result"><strong>{project.primaryMetric?.value}</strong><span>{project.primaryMetric?.label}</span></div></button></li>)}</ol>
-          </section>
-
-          <section className="chapter-section" id="work" hidden={Boolean(route&&chapter!=="work")}>
-            <ChapterHeading index={String(steps.indexOf("work")+1).padStart(2,"0")} label="Shipped work / product briefs" title="The decisions behind the delivery.">Open a brief for the problem, my scope, the tradeoffs, and what changed.</ChapterHeading>
-            <div className="work-stage">{professional.map((project,index)=><StoryDisclosure key={project.slug} project={project} index={index} open={openSlug===project.slug} muted={Boolean(openSlug&&openSlug!==project.slug)} onToggle={()=>openStory(project.slug)}/>)}</div>
-          </section>
-
-          <section className="chapter-section" id="independent-work" hidden={Boolean(route&&chapter!=="experiments")}>
-            <ChapterHeading index={String(steps.indexOf("experiments")+1).padStart(2,"0")} label="Experiment lab" title="Small bets. Working ideas.">Independent case studies and prototypes, built to learn. Not shipped company work.</ChapterHeading>
-            <div className="chapter-utility"><span><FlaskConical size={14}/> Case studies + things I built</span><TrackedLink href="/experiments" item="all-experiments">Open the one-page lab<ArrowUpRight size={14}/></TrackedLink></div><ExperimentLab initial={4}/>
-          </section>
-
-          <section className="chapter-section" id="references" hidden={Boolean(route&&chapter!=="evidence")}>
-            <ChapterHeading index={String(steps.indexOf("evidence")+1).padStart(2,"0")} label="Evidence & working notes" title="Product work is a team sport.">What managers and teammates said, plus a few things I’ve written.</ChapterHeading>
-            <div className="quotes-grid">{quotes.map((item,index)=><Recommendation key={item.name} item={item} featured={index===0}/>)}</div>
-            <div className="working-notes" id="writing"><div className="panel-topline"><span><BookOpen size={14}/> TECHNICAL NOTES</span><span>READ / REFLECT / BUILD</span></div>{writing.map(item=><TrackedLink className="note-row" href={item.href} event="article_click" item={item.title} key={item.href}><span>{item.publication} · {item.date}</span><strong>{item.title}</strong><ArrowUpRight size={16}/></TrackedLink>)}<div className="profile-row">{[["Medium","https://medium.com/@nayanak872"],["Hashnode","https://hashnode.com/@nayanak"],["DEV","https://dev.to/uncommonnayana"],["GitHub","https://github.com/nk7608"],["X","https://x.com/uncommonnayana"]].map(([name,href])=><TrackedLink key={name} href={href} item={`profile:${name}`}>{name}<ArrowUpRight size={12}/></TrackedLink>)}</div></div>
-          </section>
-
-          <section className="chapter-section" id="about" hidden={Boolean(route&&chapter!=="about")}>
-            <ChapterHeading index={String(steps.indexOf("about")+1).padStart(2,"0")} label="Off the clock" title="The person behind the PRDs.">Running, reading, coffee, and the occasional tiny game.</ChapterHeading>
-            <div className="personal-grid"><article className="personal-card"><Coffee size={20}/><h3>Curiosity doesn’t clock out.</h3><p>Outside work, I run, read, and keep looking for a good coffee, meal, or song.</p><p className="section-label personal-label"><MapPin size={13}/> Bangalore pitstops</p><div className="pitstop-tags">{life.pitstops.map(place=><span key={place}>{place}</span>)}</div></article><article className="personal-card"><BookOpen size={20}/><h3>On my reading list.</h3>{life.books.map(book=><TrackedLink className="book-row" href={book.href} item={`book:${book.title}`} key={book.title}><small>{book.status}</small><strong>{book.title}<ArrowUpRight size={13}/></strong><span>{book.author} · {book.note}</span></TrackedLink>)}</article><div className="personal-card music-card"><MusicPlayer/></div><article className="personal-card game-card"><GitBranch size={20}/><p className="section-label personal-label">A tiny side quest</p><h3>Scope Runner.</h3><p>A quick sprint through scope creep. Jump over blockers, keep moving, and see how far you get.</p><button className="button button-secondary" onClick={()=>{setGameOpen(!gameOpen);if(!gameOpen)track("game_open",{from:"about"});}} aria-expanded={gameOpen} aria-controls="scope-runner">{gameOpen?"Close game":"Take a play break"}{gameOpen?<X size={14}/>:<Play size={14}/>}</button><small>Keyboard + touch. No account. No score tracking.</small></article></div>
-            {gameOpen&&<div id="scope-runner" className="game-embed"><iframe title="Scope Runner — optional game" sandbox="allow-scripts" referrerPolicy="no-referrer" src={`/offline.html?play=1&theme=${resolvedTheme==='dark'?'dark':'light'}`} loading="lazy"/></div>}
-            <div className="conversation-panel" id="contact"><p className="section-label">Contact</p><h2>Say hello.</h2><p>Open to product roles. Also happy to swap notes on AI products or anything here.</p><Availability/><div className="contact-actions"><TrackedLink href="mailto:nayanak872@gmail.com" event="contact_open" item="contact-email" className="button button-primary"><Mail size={15}/>Email<ArrowUpRight size={14}/></TrackedLink><TrackedLink href="https://www.linkedin.com/in/nayana-k-955411170/" event="contact_open" item="contact-linkedin" className="button button-secondary"><Linkedin size={15}/>LinkedIn</TrackedLink><TrackedLink href={resumeUrl} download={resumeFilename} event="resume_link" item="about-resume" className="text-link">Résumé (PDF)<ArrowDown size={14}/></TrackedLink></div><div className="personal-socials"><TrackedLink href="https://github.com/nk7608" item="about-github"><Github size={14}/>GitHub</TrackedLink><TrackedLink href="https://x.com/uncommonnayana" item="about-x">𝕏 @uncommonnayana</TrackedLink></div></div>
-          </section>
-        </div>
-      </div>
-      {route&&<div className="tour-controls"><div className="page-shell"><button className="button button-secondary" onClick={()=>currentIndex>0?navigate(steps[currentIndex-1]):restart()}><ArrowLeft size={15}/>{currentIndex>0?"Back":"Routes"}</button><span aria-live="polite">{String(currentIndex+1).padStart(2,"0")} / {String(steps.length).padStart(2,"0")}<small>{chapters[chapter].label}</small></span>{currentIndex<steps.length-1?<button className="button button-primary" onClick={()=>navigate(steps[currentIndex+1])}>Next: {chapters[steps[currentIndex+1]].label}<ArrowRight size={15}/></button>:<button className="button button-primary" onClick={()=>navigate("work",null)}>Explore all work<ArrowUpRight size={15}/></button>}</div></div>}
+      {order.map(s=><section key={s} id={s} className={`section ${isOpen(s)?"":"is-collapsed"}`} aria-labelledby={`${s}-title`}>{blocks[s]}</section>)}
     </main>
-    <motion.footer className="site-footer" initial={false}><div className="page-shell"><span>© {new Date().getFullYear()} Nayana Kumari</span><span>Thoughtfully built. Always iterating.</span><a href="#main">Back to top ↑</a></div></motion.footer>
+    <Footer/>
   </>;
 }

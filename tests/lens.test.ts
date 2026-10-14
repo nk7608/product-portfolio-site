@@ -2,25 +2,27 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import vm from "node:vm";
-import { readJourney, routes, chapters, journeyUrl, type Route } from "../src/lib/journey";
+import { readLens, lenses, lensUrl, sections, duration, type Lens } from "../src/lib/lens";
 import { safeHref } from "../src/lib/schema";
 import experiments from "../content/experiments.json";
 
-test("every tailored route retains every chapter, with the personal chapter last",()=>{
-  for(const route of Object.values(routes)) {
-    assert.deepEqual([...route.steps].sort(),Object.keys(chapters).sort());
-    assert.equal(new Set(route.steps).size,route.steps.length);
-    assert.equal(route.steps.at(-1),"about");
+test("every persona lens keeps every section, so choosing a lens never hides content",()=>{
+  for(const lens of Object.values(lenses)) {
+    assert.deepEqual([...lens.order].sort(),[...sections].sort());
+    assert.equal(new Set(lens.order).size,lens.order.length);
   }
 });
-test("shared tour links round-trip and invalid input falls back safely",()=>{
-  for(const route of Object.keys(routes) as Route[]) for(const chapter of routes[route].steps) {
-    const url=new URL(journeyUrl(route,chapter),"https://example.com");
-    assert.deepEqual(readJourney(url.search),{route,chapter});
-  }
-  assert.deepEqual(readJourney("?tour=unknown&step=work"),{route:null,chapter:"brief"});
-  assert.deepEqual(readJourney("?tour=building&step=unknown"),{route:"building",chapter:"work"});
-  assert.deepEqual(readJourney("?tour=__proto__"),{route:null,chapter:"brief"});
+test("lens links round-trip, legacy tour links still work, invalid input falls back",()=>{
+  for(const lens of Object.keys(lenses) as Lens[]) assert.equal(readLens(new URL(lensUrl(lens),"https://example.com").search),lens);
+  assert.equal(readLens("?tour=exploring&step=work"),"curious");
+  assert.equal(readLens("?tour=hiring"),"hiring");
+  for(const bad of ["?for=__proto__","?for=unknown","?tour=__proto__",""]) assert.equal(readLens(bad),"all");
+});
+test("role durations are computed from the period text",()=>{
+  assert.equal(duration("Jan — Sep 2026"),"9 mo");
+  assert.equal(duration("Jun 2022 — Jan 2024"),"1 yr 8 mo");
+  assert.equal(duration("Feb — Dec 2024"),"11 mo");
+  assert.equal(duration("not a date"),"");
 });
 test("experiment cards retain safe evidence links and explicit boundaries",()=>{
   assert.equal(new Set(experiments.map(e=>e.id)).size,experiments.length);

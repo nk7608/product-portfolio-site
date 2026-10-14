@@ -1,10 +1,10 @@
 "use client";
-import { ThemeProvider } from "next-themes";
-import { MotionConfig } from "motion/react";
 import { AnalyticsWrapper } from "./analytics";
-import { AppearanceLab } from "./appearance-lab";
 import { OfflineSupport } from "./offline-support";
-import { Spotlight } from "./spotlight";
-export function Providers({children}:{children:React.ReactNode}) {
-  return <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange><MotionConfig reducedMotion="user"><AnalyticsWrapper><OfflineSupport/><Spotlight/>{children}<AppearanceLab/></AnalyticsWrapper></MotionConfig></ThemeProvider>;
+import { PrefsProvider } from "./prefs";
+import { Controls } from "./controls";
+import { CommandMenu } from "./command-menu";
+import { Onboarding } from "./onboarding";
+export function Providers({children,roles}:{children:React.ReactNode;roles:{slug:string;label:string}[]}) {
+  return <AnalyticsWrapper><PrefsProvider><OfflineSupport/>{children}<Controls/><CommandMenu roles={roles}/><Onboarding/></PrefsProvider></AnalyticsWrapper>;
 }
