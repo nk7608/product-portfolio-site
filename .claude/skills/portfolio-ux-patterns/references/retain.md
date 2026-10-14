@@ -15,6 +15,8 @@
 - Company logos (local, verified) as small marks beside role names.
 
 ## Quality floor
+- Social previews: `opengraph-image`/`twitter-image` on `/`, `/experiments` and every `/work/[slug]`; absolute URLs via `src/lib/site.ts`.
+- Offline: last-seen pages, a static `offline.html` summary with contact details, saved résumé and game (`public/sw.js`).
 - Pre-paint preferences (no flash), reduced-motion respect, 2px accent focus rings, native dialogs, semantic headings, `aria-expanded` on rows and sections.
 - CSP + security headers in `next.config.ts`, sandboxed game iframe, YouTube via nocookie only after Play, pinned dependencies.
 - Tests in `tests/` (prefs, lens, content, résumé PDF, service worker) and the measure/contrast scripts.

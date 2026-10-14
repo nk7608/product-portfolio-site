@@ -7,7 +7,12 @@ import { TrackedLink } from "@/components/analytics";
 import { ProductCover } from "@/components/brand-cover";
 import { Footer } from "@/components/footer";
 export async function generateStaticParams(){return (await getProjects()).map(p=>({slug:p.slug}));}
-export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{const p=await getProject((await params).slug);return {title:p?.title??"Not found",description:p?.summary};}
+export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{
+  const p=await getProject((await params).slug);
+  if(!p)return {title:"Not found"};
+  const description=p.outcome??p.summary;
+  return {title:p.title,description,alternates:{canonical:`/work/${p.slug}`},openGraph:{type:"article",url:`/work/${p.slug}`,title:`${p.title} · Nayana Kumari`,description},twitter:{card:"summary_large_image",title:`${p.title} · Nayana Kumari`,description}};
+}
 export default async function ProjectPage({params}:{params:Promise<{slug:string}>}){
   const p=await getProject((await params).slug);
   if(!p)notFound();

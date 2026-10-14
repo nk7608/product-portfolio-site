@@ -1,16 +1,28 @@
-/* Cache only the self-contained fallback. Portfolio pages and PDFs stay network-first. */
-const OFFLINE_CACHE = "nayana-offline-v1";
+/* Offline support. Pages stay network-first; when the network fails we serve, in order:
+ * 1) the last copy of that page this browser saw, 2) /offline.html (a static summary with contact details).
+ * The résumé and the offline game are cached so they work offline too. */
+const CACHE = "nayana-offline-v2";
+const PRECACHE = ["/offline.html", "/scope-runner.html", "/assets/nayana-kumari-ai-product-manager-resume.pdf"];
 self.addEventListener("install", event => {
-  event.waitUntil(caches.open(OFFLINE_CACHE).then(cache => cache.add("/offline.html")).then(() => self.skipWaiting()));
+  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(PRECACHE)).then(() => self.skipWaiting()));
 });
 self.addEventListener("activate", event => {
-  event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key.startsWith("nayana-offline-") && key !== OFFLINE_CACHE).map(key => caches.delete(key)))).then(() => self.clients.claim()));
+  event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key.startsWith("nayana-offline-") && key !== CACHE).map(key => caches.delete(key)))).then(() => self.clients.claim()));
 });
 self.addEventListener("fetch", event => {
-  const url = new URL(event.request.url);
-  if (event.request.method !== "GET" || url.origin !== self.location.origin || event.request.mode !== "navigate" || url.pathname.startsWith("/assets/")) return;
-  event.respondWith(fetch(event.request).then(response => {
-    if (response.status >= 500) return caches.match("/offline.html").then(cached => cached || response);
+  const request = event.request;
+  const url = new URL(request.url);
+  if (request.method !== "GET" || url.origin !== self.location.origin) return;
+  // The résumé: network first, cached copy when offline.
+  if (url.pathname === "/assets/nayana-kumari-ai-product-manager-resume.pdf") {
+    event.respondWith(fetch(request).catch(() => caches.match(request).then(cached => cached || Response.error())));
+    return;
+  }
+  if (request.mode !== "navigate" || url.pathname.startsWith("/assets/")) return;
+  const fallback = () => caches.match(request).then(page => page || caches.match("/offline.html")).then(page => page || new Response("Unable to load the page. Please reconnect and retry.", { status: 503, headers: { "Content-Type": "text/plain" } }));
+  event.respondWith(fetch(request).then(response => {
+    if (response.status >= 500) return fallback().then(page => page || response);
+    if (response.ok && response.type === "basic") { const copy = response.clone(); caches.open(CACHE).then(cache => cache.put(request, copy)).catch(() => {}); }
     return response;
-  }).catch(() => caches.match("/offline.html").then(cached => cached || new Response("Unable to load the page. Please reconnect and retry.", {status:503,headers:{"Content-Type":"text/plain"}}))));
+  }).catch(fallback));
 });
