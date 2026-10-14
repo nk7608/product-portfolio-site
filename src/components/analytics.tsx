@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useContext, type ReactNode, type ComponentProps } from "react";
 import Link from "next/link";
-export type AnalyticsEvent = "appearance_change" | "journey_start" | "journey_step" | "journey_exit" | "game_open" | "project_open" | "artifact_open" | "case_detail_open" | "case_expand" | "case_collapse" | "evidence_click" | "build_click" | "recommendation_expand" | "article_click" | "resume_link" | "theme_change" | "recommendation_change" | "music_load" | "music_play" | "music_pause" | "music_error" | "contact_open" | "pitstop_select";
+export type AnalyticsEvent = "appearance_change" | "lens_change" | "game_open" | "project_open" | "artifact_open" | "case_detail_open" | "case_expand" | "case_collapse" | "evidence_click" | "build_click" | "recommendation_expand" | "article_click" | "resume_link" | "theme_change" | "recommendation_change" | "music_load" | "music_play" | "music_pause" | "music_error" | "contact_open" | "pitstop_select";
 export type AnalyticsAdapter = (event: AnalyticsEvent, properties: Record<string,string|number|boolean>) => void;
 const noop:AnalyticsAdapter = ()=>{};
 const AnalyticsContext = createContext<AnalyticsAdapter>(noop);

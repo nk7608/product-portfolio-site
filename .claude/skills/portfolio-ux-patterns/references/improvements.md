@@ -22,4 +22,5 @@ Ordered by impact on "too much to read". Each item names the files it touches. R
 13. Analytics adapter: count lens choices and brief opens (privacy-safe, no PII) to learn which persona actually visits.
 
 ## Done already (for context)
+- Oct 14, 2026: P0 items 1–4 and P1 items 6–9, P2 item 11 shipped (Experience list, persona lens, proof tiles, compact experiments, quotes/writing trim, widget row, sticky contact bar, appearance in menu, solid cards on phones). Remaining: P1 item 5 (tldr/approach frontmatter), P2 items 10, 12, 13.
 - Unified surfaces, product cover scenes, open-to-work tag, de-pitched copy, show-4-of-6 experiments, quote clamp, collapsible reflections, mobile cover stacking, security headers (Oct 13, 2026).

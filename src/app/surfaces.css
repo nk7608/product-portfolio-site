@@ -41,7 +41,7 @@ html[data-appearance=blocks] body::before{opacity:.1;background-image:radial-gra
 @keyframes drift{to{transform:translate3d(-2%,1.5%,0) scale(1.04);}}
 
 /* ───────── Surfaces ───────── */
-:root :is(.route-picker,.brief-document,.proof-panel,.career-step,.work-story,.experiment-card,.quote-card,.working-notes,.personal-card,.conversation-panel,.case-header,.case-body-grid,.appearance-dialog){
+:root :is(.proof-card,.experience-row,.experiment-card,.quote-card,.working-notes,.personal-card,.conversation-panel,.case-header,.case-body-grid,.appearance-dialog){
   position:relative;border:0;border-radius:var(--radius-card);
   background:radial-gradient(520px circle at var(--mx,-999px) var(--my,-999px),var(--spot),transparent 60%),var(--surface-bg,var(--glass));
   -webkit-backdrop-filter:blur(var(--blur)) saturate(150%);backdrop-filter:blur(var(--blur)) saturate(150%);
@@ -49,32 +49,23 @@ html[data-appearance=blocks] body::before{opacity:.1;background-image:radial-gra
   transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,opacity .2s;
 }
 /* 1px gradient edge; brightens under the cursor. */
-:root :is(.route-picker,.brief-document,.proof-panel,.career-step,.work-story,.experiment-card,.quote-card,.working-notes,.personal-card,.conversation-panel,.case-header,.case-body-grid,.appearance-dialog)::after{
+:root :is(.proof-card,.experience-row,.experiment-card,.quote-card,.working-notes,.personal-card,.conversation-panel,.case-header,.case-body-grid,.appearance-dialog)::after{
   content:"";position:absolute;inset:0;z-index:3;border-radius:inherit;padding:var(--edge-w);pointer-events:none;
   background:radial-gradient(260px circle at var(--mx,-999px) var(--my,-999px),var(--spot-edge),transparent 70%),var(--edge-current,var(--edge));
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);
 }
 /* Interactive cards lift; containers only glow. */
-:root :is(.career-step,.work-story:not(.is-open),.experiment-card,.quote-card,.personal-card):hover{transform:var(--lift);box-shadow:var(--highlight),var(--card-shadow-hover);--edge-current:var(--edge-hover);}
-:root :is(.brief-document,.proof-panel,.working-notes,.route-picker,.conversation-panel,.case-body-grid)[data-lit]{--edge-current:var(--edge-hover);}
+:root :is(.experience-row:not(.is-open),.experiment-card,.quote-card,.personal-card):hover{transform:var(--lift);box-shadow:var(--highlight),var(--card-shadow-hover);--edge-current:var(--edge-hover);}
+:root :is(.proof-card,.working-notes,.conversation-panel,.case-body-grid)[data-lit]{--edge-current:var(--edge-hover);}
 /* Active: an open story, a focused card. */
-:root :is(.work-story.is-open,.career-step:focus-visible,.experiment-card:focus-within,.work-story:focus-within){--edge-current:var(--edge-active);box-shadow:var(--highlight),var(--card-shadow-active);}
-:root .work-story.is-open{--edge-w:1.5px;}
-:root .work-story::before{content:none;}
-:root .work-story.is-muted{opacity:.78;}
-:root .work-story.is-muted:hover{opacity:1;}
+:root :is(.experience-row.is-open,.experience-row:focus-within,.experiment-card:focus-within){--edge-current:var(--edge-active);box-shadow:var(--highlight),var(--card-shadow-active);}
+:root .experience-row.is-open{--edge-w:1.5px;}
 
 /* Featured surfaces get a soft coloured halo (outer shadows never tint the glass itself). */
-:root :is(.route-picker,.conversation-panel){--halo-shadow:-22px -16px 60px -18px color-mix(in srgb,var(--aura-sky) 95%,transparent),24px 20px 60px -18px color-mix(in srgb,var(--aura-sun) 95%,transparent),0 30px 60px -30px color-mix(in srgb,var(--aura-leaf) 95%,transparent);box-shadow:var(--highlight),var(--card-shadow),var(--halo-shadow);}
-:root .route-picker::before{content:none;}
+:root :is(.proof-card,.conversation-panel){--halo-shadow:-22px -16px 60px -18px color-mix(in srgb,var(--aura-sky) 95%,transparent),24px 20px 60px -18px color-mix(in srgb,var(--aura-sun) 95%,transparent),0 30px 60px -30px color-mix(in srgb,var(--aura-leaf) 95%,transparent);box-shadow:var(--highlight),var(--card-shadow),var(--halo-shadow);}
 :root .conversation-panel{--surface-bg:radial-gradient(ellipse at 100% 0,color-mix(in srgb,var(--aura-sun) 70%,transparent),transparent 60%),radial-gradient(ellipse at 0 100%,color-mix(in srgb,var(--aura-sky) 70%,transparent),transparent 55%),var(--glass);}
 
 /* Nested controls share the language at a smaller scale. */
-:root .route-options button{position:relative;background:color-mix(in srgb,var(--surface) 70%,transparent);border:1px solid var(--border);border-radius:calc(var(--radius-card) - 8px);transition:transform .2s,border-color .2s,background .2s,box-shadow .2s;}
-:root .route-options button:hover,:root .route-options button:focus-visible{border-color:var(--accent);background:color-mix(in srgb,var(--accent-soft) 70%,var(--surface));transform:translateX(3px);box-shadow:0 10px 24px -14px color-mix(in srgb,var(--accent) 60%,transparent);}
-:root .proof-item{transition:background .25s;}
-:root .proof-item:hover{background:color-mix(in srgb,var(--accent-soft) 40%,transparent);}
-:root .proof-item+.proof-item{border-color:var(--border);}
 
 /* Chrome: header, rail, appearance control. */
 .site-header.is-scrolled .header-shell,.site-header.menu-open .header-shell{background:var(--glass);border-color:var(--border);box-shadow:var(--highlight),var(--card-shadow);-webkit-backdrop-filter:blur(var(--blur)) saturate(150%);backdrop-filter:blur(var(--blur)) saturate(150%);}
@@ -86,7 +77,6 @@ html[data-appearance=blocks] body::before{opacity:.1;background-image:radial-gra
 .appearance-option{background:color-mix(in srgb,var(--surface) 70%,transparent);transition:transform .2s,border-color .2s;}
 .appearance-option:hover{transform:translateY(-2px);border-color:var(--accent);}
 .appearance-option[aria-pressed=true]{outline:0;border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 18%,transparent);}
-html[data-appearance=greenroom] .chapter-rail{padding:17px;border:1px solid var(--border);border-radius:var(--radius-card);background:var(--glass);-webkit-backdrop-filter:blur(var(--blur));backdrop-filter:blur(var(--blur));box-shadow:var(--highlight),var(--card-shadow);}
 
 /* ───────── Product covers (illustrated scenes, see cover-scenes.tsx) ───────── */
 .product-cover{position:relative;overflow:hidden;isolation:isolate;height:200px;border-radius:max(4px,calc(var(--radius-card) - 8px));
@@ -98,7 +88,7 @@ html[data-appearance=greenroom] .chapter-rail{padding:17px;border:1px solid var(
 .cover-note{position:absolute;left:24px;bottom:22px;max-width:min(330px,44%);display:flex;flex-direction:column;gap:7px;}
 .cover-note span{font:9px/1.4 var(--font-geist-mono),monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--cn-muted);}
 .cover-note p{font-size:15px;line-height:1.35;font-weight:500;letter-spacing:-.015em;color:var(--cn-ink);}
-:is(.work-story,.experiment-card,.case-page):hover .product-cover.has-caption .scene{transform:scale(1.025);}
+:is(.experience-row,.experiment-card,.case-page):hover .product-cover.has-caption .scene{transform:scale(1.025);}
 :is(.experiment-card):hover .product-cover:not(.has-caption) .scene{transform:translateX(50%) scale(1.03);}
 
 .scene text{font:500 10px var(--font-geist-mono),ui-monospace,monospace;fill:var(--sc-ink);letter-spacing:-.01em;}
@@ -121,15 +111,13 @@ html[data-appearance=greenroom] .chapter-rail{padding:17px;border:1px solid var(
 .scene .hole{fill:var(--sc-panel-2);stroke:var(--sc-stroke);}
 .scene .ring{fill:none;stroke:var(--sc-line);stroke-width:10;}
 .scene .ring-b{fill:none;stroke:var(--brand);stroke-width:10;stroke-linecap:round;}
-:is(.work-story,.experiment-card):hover .scene .flow{animation:dash 1s linear infinite;}
+:is(.experience-row,.experiment-card):hover .scene .flow{animation:dash 1s linear infinite;}
 @keyframes dash{to{stroke-dashoffset:-18;}}
 /* Blue Blocks scenes are drawn as solid tiles with hard shadows. */
 html[data-appearance=blocks] .scene .pn{stroke-width:1.5;filter:drop-shadow(3px 3px 0 #10204b);}
 html.dark[data-appearance=blocks] .scene .pn{filter:drop-shadow(3px 3px 0 #050b1c);}
 
 /* Placement */
-.product-portfolio .work-summary>.product-cover{grid-column:1/-1;height:224px;}
-.product-portfolio .work-story.is-muted .product-cover{display:none;}
 .experiment-card>.product-cover{margin-top:17px;height:168px;flex-shrink:0;}
 .case-page>.product-cover{height:280px;margin-top:30px;border-radius:var(--radius-card) var(--radius-card) 0 0;}
 .case-page>.product-cover .cover-note{left:34px;bottom:30px;}
@@ -143,12 +131,6 @@ html.dark[data-appearance=blocks] .scene .pn{filter:drop-shadow(3px 3px 0 #050b1
 .brand-logo img{display:block;width:100%;height:100%;object-fit:contain;}
 .brand-logo.brand-loans24{width:65px;}
 .brand-logo.brand-loans24 img{padding:6px;}
-.company-lockup{display:flex;align-items:center;gap:13px;}
-.career-title .brand-logo{width:38px;height:38px;border-radius:10px;}
-.career-title h3{margin-right:auto;}
-.story-document-header{padding:28px 34px 22px;display:flex;gap:16px;align-items:center;border-bottom:1px solid var(--border);background:linear-gradient(115deg,transparent,color-mix(in srgb,var(--accent-soft) 45%,transparent));}
-.story-document-header .brand-logo{width:57px;height:57px;}
-.story-document-header h3{font-size:24px;letter-spacing:-.035em;margin-top:7px;}
 .product-portfolio .story-layout{padding:30px 34px;}
 .story-narrative{counter-reset:story-section;}
 .story-narrative>.story-prose{padding:0 0 21px;margin-bottom:21px;border-bottom:1px solid var(--border);}
@@ -158,21 +140,6 @@ html.dark[data-appearance=blocks] .scene .pn{filter:drop-shadow(3px 3px 0 #050b1
 .experiment-brand .experiment-name{margin-top:0;}
 .experiment-brand .brand-logo{width:40px;height:40px;border-radius:10px;}
 
-/* ───────── Career flow: a compact progression, not a second copy of the briefs ───────── */
-.career-step p:not(.career-role){display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-@media(min-width:1000px){
-  .career-flow{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
-  html:is([data-appearance=blocks],[data-appearance=chic]) .career-flow{grid-template-columns:repeat(4,minmax(0,1fr));}
-  .career-flow>li{grid-template-columns:1fr;grid-template-rows:auto 1fr;gap:10px;}
-  .flow-marker{padding-top:0;}
-  .career-flow>li::before,.career-flow>li:not(:last-child)::before{display:none;}
-  .flow-marker{display:flex;align-items:center;gap:10px;}
-  .flow-marker::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--border-strong),transparent);}
-  .career-step{height:100%;display:flex;flex-direction:column;}
-  .career-step .career-open{margin-top:auto;}
-  .career-step .career-result{margin-top:16px;margin-bottom:16px;}
-}
-
 /* ───────── Hero trust strip ───────── */
 .trust-strip{display:flex;align-items:center;gap:14px;margin-top:30px;flex-wrap:wrap;}
 .trust-strip>span{font:9px var(--font-geist-mono),monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
@@ -180,12 +147,9 @@ html.dark[data-appearance=blocks] .scene .pn{filter:drop-shadow(3px 3px 0 #050b1
 .trust-logos .brand-logo{width:34px;height:34px;border-radius:50%;border:2px solid var(--background);box-shadow:0 2px 8px #0000001a;margin-left:-8px;transition:transform .2s;}
 .trust-logos .brand-logo:first-child{margin-left:0;}
 .trust-logos .brand-logo:hover{transform:translateY(-3px);z-index:1;}
-.trust-names{font-size:12px;color:var(--muted);}
-.trust-names strong{color:var(--foreground);font-weight:550;}
 
 @media(max-width:760px){
   .product-cover{height:170px;}
-  .product-portfolio .work-summary>.product-cover{height:170px;margin-bottom:18px;}
   .product-cover.has-caption .scene{opacity:.35;}
   .cover-note{left:18px;right:18px;bottom:18px;max-width:none;}
   .cover-note p{font-size:14px;}
@@ -194,7 +158,6 @@ html.dark[data-appearance=blocks] .scene .pn{filter:drop-shadow(3px 3px 0 #050b1
   .case-page>.product-cover .cover-note{left:20px;bottom:20px;}
   .case-page :is(.case-header,.case-body-grid){padding:22px;}
   .case-header>.brand-logo{width:54px;height:54px;margin-top:-48px;}
-  .story-document-header{padding:22px 20px;}.story-document-header h3{font-size:22px;}
   .product-portfolio .story-layout{padding:22px 20px;}
   .brand-logo{width:40px;height:40px;}
 }
@@ -210,30 +173,24 @@ html.dark[data-appearance=blocks] .scene .pn{filter:drop-shadow(3px 3px 0 #050b1
 .story-more summary svg{color:var(--accent);transition:transform .2s;}
 .story-more[open] summary svg{transform:rotate(45deg);}
 .story-more>.judgment-block{margin-top:12px;}
-.story-evidence .metric-context{margin-top:14px;}
-.career-step h4{margin-bottom:0;}
 
 /* Phones: the cover illustration and its caption stack instead of overlapping. */
 @media(max-width:760px){
-  .product-cover.has-caption,.product-portfolio .work-summary>.product-cover{height:auto;display:flex;flex-direction:column;}
+  .product-cover.has-caption{height:auto;display:flex;flex-direction:column;}
   .product-cover.has-caption .scene{position:relative;inset:auto;transform:none;opacity:1;width:100%;height:auto;max-width:none;aspect-ratio:516/240;margin-top:6px;}
   .product-cover.has-caption .cover-note{position:relative;inset:auto;max-width:none;padding:12px 18px 18px;}
   .case-page>.product-cover{height:auto;}
   .case-page>.product-cover .cover-note{left:auto;bottom:auto;}
   .case-page>.product-cover .cover-note p{font-size:15px;}
-  :is(.work-story,.experiment-card,.case-page):hover .product-cover.has-caption .scene{transform:none;}
+  :is(.experience-row,.experiment-card,.case-page):hover .product-cover.has-caption .scene{transform:none;}
 }
 
 @media(prefers-reduced-motion:reduce){
   body::after,.appearance-dot,.scene .flow{animation:none !important;}
-  :root :is(.career-step,.work-story,.experiment-card,.quote-card,.personal-card,.route-options button,.appearance-option):hover{transform:none;}
+  :root :is(.experience-row,.experiment-card,.quote-card,.personal-card,.appearance-option):hover{transform:none;}
   .product-cover .scene{transition:none;}
 }
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  :root :is(.route-picker,.brief-document,.proof-panel,.career-step,.work-story,.experiment-card,.quote-card,.working-notes,.personal-card,.conversation-panel,.case-header,.case-body-grid){--glass:var(--surface);}
+  :root :is(.proof-card,.experience-row,.experiment-card,.quote-card,.working-notes,.personal-card,.conversation-panel,.case-header,.case-body-grid){--glass:var(--surface);}
 }
-.career-step>*{align-self:stretch;}
 html .trust-logos .brand-logo{border-radius:50%;border:2px solid var(--background);box-shadow:0 2px 8px #0000001f;}
-.story-evidence .metric-context{margin-top:10px;}
-.story-evidence .evidence-links{display:flex;flex-wrap:wrap;gap:6px 20px;margin-top:16px;}
-.story-evidence .evidence-links a{min-height:40px;display:inline-flex;align-items:center;gap:6px;}

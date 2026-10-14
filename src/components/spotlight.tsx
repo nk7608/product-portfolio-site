@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 /** Cursor spotlight for every glass surface: one delegated listener writes --mx/--my on the hovered card. Fine pointers only. */
-export const surfaceSelector = ".route-picker,.brief-document,.proof-panel,.career-step,.work-story,.experiment-card,.quote-card,.working-notes,.personal-card,.conversation-panel,.case-header,.case-body-grid";
+export const surfaceSelector = ".proof-card,.experience-row,.experiment-card,.quote-card,.working-notes,.personal-card,.conversation-panel,.case-header,.case-body-grid";
 export function Spotlight() {
   useEffect(() => {
     if (!window.matchMedia("(hover:hover) and (pointer:fine)").matches) return;

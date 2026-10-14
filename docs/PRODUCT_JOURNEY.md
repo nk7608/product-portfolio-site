@@ -1,34 +1,21 @@
 # Portfolio product journey
 
-## Design analysis
-The first task for a visitor is choosing how to assess Nayana, not completing a form. The landing page offers three optional routes and immediate access to the full portfolio. No identity or answer is collected. The route is a shareable URL, and browser Back works between chapters.
+The page tells one story — who I am → what I shipped and why → how I think → how to reach me — and lets visitors choose a lens on it. Rules and budgets live in `.claude/skills/portfolio-ux-patterns`.
 
-- Hiring: brief → shipped work → career → experiments → evidence → personal.
-- Building: shipped work → career → brief → experiments → evidence → personal.
-- Exploring: career → brief → shipped work → experiments → evidence → personal.
+## Shape (Oct 14, 2026)
+1. **Profile hero**: positioning line, Open to work + location/hours tags, Email / Résumé / LinkedIn / GitHub; a proof card with three outcome tiles and the "Shipped with" logos.
+2. **Persona lens** ("What brings you here?": Everything · Hiring · Building · Curious). Stored in `?for=`; reorders sections in the DOM (so keyboard and screen-reader order match), never hides one. Hiring pre-opens the latest brief. Retired `?tour=` links map onto lenses (`src/lib/lens.ts`).
+3. **Experience**: one list, newest first (role · company, dates · duration · location, one result). A row opens an inline brief: cover scene, TL;DR, Challenge / Approach / Results, then a collapsible for scope, release notes, alignment, reflection and metric definitions, then links to the full brief at `/work/[slug]`.
+4. **Experiment lab**: six compact cards (3-up desktop, swipe row on phones) with type chip, title, honesty note and links. Full cards with summaries stay on `/experiments`.
+5. **Evidence**: featured quote + two short ones, "N more" for the rest; writing list.
+6. **Off the clock**: one widget row — Fix You player, Bangalore time + pitstops, current book + Scope Runner.
+7. **Contact**: Email, LinkedIn, résumé. On phones a slim Email/Résumé bar appears after the hero and hides at the contact block. Appearance moved into the menu/footer on phones.
 
-All routes include every chapter. The selected route is rendered on the server from its URL so shared tour links do not flash the full page. Without a tour URL, the complete page is rendered and is readable without onboarding. The career flow runs chronologically from Phasio through Blaze and Opsmith to Vidrush; every node opens the corresponding source-backed brief.
+## Measured (`.claude/skills/portfolio-ux-patterns/scripts/measure.mjs`)
+| | Before | After |
+|---|---|---|
+| Mobile height (390px) | 12,780px | ~3,850px |
+| Desktop height (1440px) | 8,837px | ~4,170px |
+| Words in DOM (all collapsed) | ~1,400 | ~710 (includes clamped quotes and off-screen carousel cards) |
 
-## Content and components
-Keep professional facts in existing MDX. `work-story.tsx` renders all four companies from those records, including role, dates, metrics, ownership, decisions, releases, alignment, reflection, and evidence. Do not rewrite measured outcomes during visual changes.
-
-`content/experiments.json` owns the experiment cards. `ExperimentLab` is reused in the guided journey, full portfolio, and `/experiments`. Independent proposals are identified explicitly; Foobar is a simulated deployment. The cycle-synced build remains a personal prototype.
-
-Use PRD and spec language where it helps structure the evidence, not to describe personal facts as invented product metrics. Recommendations remain verbatim and Elaya remains explicitly excerpted.
-
-## Visual foundation
-Reuse the warm sunrise, sky, leaf, and clay tokens in globals.css for light mode and the existing deep sky, green, amber, and coral tokens for dark mode. Instrument Serif is selective in editorial headings. Geist Sans handles interface copy and narrative; Geist Mono identifies dates, stages, and metrics. Journey styles are scoped in journey.css so standalone MDX pages retain their established reading layout.
-
-Prefer readable 12–14px summaries, 18–20px card titles, and 28–37px section titles. All buttons have 44px minimum targets. Stack grids on mobile, collapse guided chapter navigation behind See all steps, with a wrapping grid when opened, and let long briefs scroll naturally. Do not lock scrolling, auto-advance, or hijack arrow keys outside the game.
-
-## Offline and play
-Scope Runner is a self-contained HTML/canvas game at `/offline.html`, also loaded on explicit request in the final chapter. It supports keyboard and touch, pause/resume, restart, and pauses on blur/backgrounding. It records no scores or personal data. Motion starts only on user activation; reduced motion lowers its pace.
-
-The production service worker caches only the offline fallback after an initial successful visit. It does not cache or intercept resume PDF downloads, API requests, or third-party content. Page navigations always attempt the network; network failure or 5xx uses the fallback, while 404 stays a 404. A first visit while offline cannot be recovered before installation. No guarantee is made for third-party prototypes or embeds offline.
-
-## Reference patterns
-- Typeform onboarding: https://mobbin.com/flows/1856adf8-41de-4886-882b-18ed02a2d763 — focused choices and clear continuation.
-- Linear product sections: https://mobbin.com/sites/sections/ac08f1c7-d536-4996-91cc-85da059dcade — document hierarchy, small labels, compact structured panels.
-
-## Reusable instructions for future assistants
-Preserve the Next.js/TypeScript/Tailwind/Motion/MDX/Vercel stack. Add routes and chapter order in src/lib/journey.ts; use existing content sources and shared cards. Keep onboarding optional, every section available to all routes, and hobbies last. Preserve metrics with attribution and downloadable resume links. Keep experiments on one mobile-friendly page. Validate URL restoration, Back/Next/exit, keyboard focus, theme, disclosure closure, PDF downloads, game controls, offline fallback behavior, and reduced motion before deploying.
+Removed: guided tour bar/controls, route card, chapter rail, separate Product brief and Career flow chapters, and the per-look layout forks (Blocks/Chic top nav, Green Room rail).

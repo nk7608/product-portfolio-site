@@ -36,7 +36,7 @@ export function Header() {
   }, []);
 
   const internal = [
-    ["Journey", "/#journey"], ["Work", "/#work"], ["Experiments", "/experiments"], ["About", "/#about"],
+    ["Work", "/#work"], ["Experiments", "/#independent-work"], ["About", "/#about"],
   ] as const;
 
   return <header className={cn("site-header", scrolled && "is-scrolled", open && "menu-open")}>
@@ -54,6 +54,7 @@ export function Header() {
       {internal.map(([label, href]) => <a className="mobile-nav-link" href={href} key={href} onClick={() => setOpen(false)}>{label}</a>)}
       <TrackedLink className="mobile-nav-link" href={resumeUrl} download={resumeFilename} event="resume_link" item="mobile-resume" onClick={() => setOpen(false)}>Resume</TrackedLink>
       <TrackedLink className="mobile-nav-link" href="mailto:nayanak872@gmail.com" event="contact_open" item="mobile-email" onClick={() => setOpen(false)}>Contact</TrackedLink>
+      <button type="button" className="mobile-nav-link" onClick={() => { setOpen(false); window.dispatchEvent(new Event("open-appearance")); }}>Appearance</button>
     </nav>}
   </header>;
 }
