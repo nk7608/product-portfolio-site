@@ -1,11 +1,11 @@
 /** Persona lens: visitors say who they are and the page reorders itself. It never hides a section. */
-export const sections = ["work", "experiments", "evidence", "about", "contact"] as const;
+export const sections = ["work", "experiments", "writing", "evidence", "about", "contact"] as const;
 export type Section = typeof sections[number];
 export const lenses = {
-  all: { label: "Everything", order: ["work", "experiments", "evidence", "about", "contact"], open: null },
-  hiring: { label: "Hiring", order: ["work", "evidence", "contact", "experiments", "about"], open: "vidrush" },
-  building: { label: "Building", order: ["experiments", "work", "evidence", "about", "contact"], open: null },
-  curious: { label: "Curious", order: ["about", "experiments", "work", "evidence", "contact"], open: null },
+  all: { label: "Everything", order: ["work", "experiments", "writing", "evidence", "about", "contact"], open: null },
+  hiring: { label: "Hiring", order: ["work", "evidence", "experiments", "writing", "about", "contact"], open: "vidrush" },
+  building: { label: "Building", order: ["work", "experiments", "writing", "evidence", "about", "contact"], open: null },
+  curious: { label: "Curious", order: ["about", "experiments", "writing", "work", "evidence", "contact"], open: null },
 } satisfies Record<string, { label: string; order: Section[]; open: string | null }>;
 export type Lens = keyof typeof lenses;
 const legacy: Record<string, Lens> = { hiring: "hiring", building: "building", exploring: "curious" };

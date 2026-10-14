@@ -1,26 +1,17 @@
-# Improvement backlog (applies this skill to the current code)
+# Backlog
 
-Ordered by impact on "too much to read". Each item names the files it touches. Re-run `scripts/measure.mjs` after each.
+## Next
+1. **Real TL;DR and approach copy per role** — add `tldr` and `approach` frontmatter to `content/projects/*.mdx` so the opened row doesn't reuse `outcome` and the first two `decisions`.
+2. **"Now" line in the hero** (Paco/Emil pattern): one sentence on what Nayana is exploring this month, edited in `content/life.json`.
+3. **Hover preview on desktop rows** (A24/Waka Waka pattern): a small cover thumbnail following the pointer over Experience/Experiments rows; off on touch and with Motion: Off.
+4. **Consent-aware analytics adapter** to learn which persona actually visits and which rows get opened (no PII).
+5. **OG image per persona link** so `?for=hiring` previews show role + outcomes.
 
-## P0 — length and repetition
-1. **Merge Career flow + Shipped work into one Experience list.** `portfolio-home.tsx` (`#journey`, `#work`), `work-story.tsx`, `src/lib/journey.ts` (drop the `journey` chapter, keep anchors redirecting to `#work`). Row = logo, role · company, dates · duration, one result, chevron. Expanded = cover scene + TL;DR + Challenge/Approach/Results + links + "Full brief" → `/work/[slug]`. Expected saving: ~2,500px mobile.
-2. **Persona lens replaces the route card and tour mode.** Segmented control under the hero; `?for=` param; reorders blocks and pre-opens one. Remove `tour-bar`, `tour-controls`, `hidden` chapter logic, chapter rail on mobile. Expected saving: ~1,200px mobile.
-3. **Proof as 3 small tiles** in the hero area; remove the separate "Product brief" chapter (its three facts move into the hero line and the about widget). ~900px.
-4. **Experiments as a carousel on mobile, 3-up grid on desktop**; cards show cover + chip + name + title; summary/boundary in the expanded state. ~1,500px mobile.
+## Later
+6. Case pages: margin table of contents (Attio pattern) and the same Challenge / Approach / Results header as the homepage row.
+7. A "print / PDF this page" control that renders the current journey as a one-page brief.
+8. Visual regression snapshots (Playwright) for 2 personas × Paper/Ink × 390/1440.
 
-## P1 — readability
-5. **Brief template** (Attio pattern): TL;DR line, then three short columns/sections; product context, decisions, release notes, alignment, reflection behind "Full brief". Update content frontmatter with a `tldr` field and `approach` bullets.
-6. **Evidence**: one featured quote + carousel of the rest; writing list collapsed to 3 links.
-7. **Off the clock as a widget row** (song · Bangalore clock/pitstops · book); game as a link.
-8. **Sticky mobile contact bar**; remove the large contact panel's duplicate chips.
-9. **Look switcher into the header menu on mobile**; remove the floating pill below 760px.
-
-## P2 — polish
-10. Mobile label sizes ≥ 11px; desktop keeps the 9px mono flavour.
-11. Card blur only on desktop; solid glass on phones for scroll performance.
-12. Appearance dialog: real mini-render previews and a separate Mode control (see `portfolio-looks`).
-13. Analytics adapter: count lens choices and brief opens (privacy-safe, no PII) to learn which persona actually visits.
-
-## Done already (for context)
-- Oct 14, 2026: P0 items 1–4 and P1 items 6–9, P2 item 11 shipped (Experience list, persona lens, proof tiles, compact experiments, quotes/writing trim, widget row, sticky contact bar, appearance in menu, solid cards on phones). Remaining: P1 item 5 (tldr/approach frontmatter), P2 items 10, 12, 13.
-- Unified surfaces, product cover scenes, open-to-work tag, de-pitched copy, show-4-of-6 experiments, quote clamp, collapsible reflections, mobile cover stacking, security headers (Oct 13, 2026).
+## Done
+- Oct 14, 2026 — minimal rebuild: one column, index rows, first-visit intro, persona journeys, Settings (theme/accent/type/size/detail/motion), ⌘K, copy email, themes Paper/Stone/Ink/Night × 4 accents, Instrument Sans + Newsreader, decorative effects removed.
+- Oct 13–14, 2026 — security headers, Next.js upgrade, merged Experience list, persona lens.

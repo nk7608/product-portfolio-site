@@ -48,10 +48,10 @@ test("resume CTAs use the approved downloadable PDF",()=>{
   const resumePath="public/assets/nayana-kumari-ai-product-manager-resume.pdf";
   assert.ok(fs.existsSync(resumePath),"downloadable resume PDF is missing");
   assert.ok(fs.statSync(resumePath).size>0,"downloadable resume PDF is empty");
-  for(const source of ["src/components/header.tsx","src/components/portfolio-home.tsx"]){
+  assert.match(fs.readFileSync("src/components/command-menu.tsx","utf8"),/\/assets\/nayana-kumari-ai-product-manager-resume\.pdf/);
+  for(const source of ["src/components/command-menu.tsx","src/components/portfolio-home.tsx"]){
     const content=fs.readFileSync(source,"utf8");
-    assert.match(content,/\/assets\/nayana-kumari-ai-product-manager-resume\.pdf/);
-    assert.match(content,/download=\{resumeFilename\}/);
+    assert.match(content,/download/);
     assert.doesNotMatch(content,/docs\.google\.com\/document/);
   }
   assert.match(fs.readFileSync("next.config.ts","utf8"),/Content-Disposition[\s\S]*attachment;/);

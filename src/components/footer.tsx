@@ -1,2 +1,2 @@
-import { TrackedLink } from "./analytics";
-export function Footer(){return <footer className="site-footer"><div className="page-shell"><span>© {new Date().getFullYear()} Nayana Kumari</span><span>Product, with evidence.</span><TrackedLink href="https://x.com/uncommonnayana" item="footer-x" event="contact_open">@uncommonnayana ↗</TrackedLink></div></footer>;}
+import Link from "next/link";
+export function Footer(){return <footer className="site-footer"><span>© {new Date().getFullYear()} Nayana Kumari</span><span>Built by hand in Bangalore.</span><Link className="link spacer" href="/">Home</Link></footer>;}

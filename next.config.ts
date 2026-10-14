@@ -1,16 +1,16 @@
 import type { NextConfig } from "next";
 
 const dev = process.env.NODE_ENV !== "production";
-/* Third parties are opt-in embeds only: YouTube (music card), X (build log), Vercel toolbar on previews.
+/* Third parties are opt-in embeds only: the YouTube (nocookie) player after "Play", and Vercel's toolbar on previews.
  * Next.js emits inline bootstrap scripts on statically rendered pages, so script-src keeps 'unsafe-inline'
  * rather than forcing every page dynamic for nonces; everything else is locked to an explicit allowlist. */
 const csp = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval'" : ""} https://www.youtube.com https://s.ytimg.com https://platform.twitter.com https://vercel.live`,
+  `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval'" : ""} https://vercel.live`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://i.ytimg.com https://*.twimg.com https://vercel.live https://vercel.com",
+  "img-src 'self' data: blob: https://vercel.live https://vercel.com",
   "font-src 'self' data: https://vercel.live",
-  "frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://platform.twitter.com https://syndication.twitter.com https://vercel.live",
+  "frame-src 'self' https://www.youtube-nocookie.com https://vercel.live",
   `connect-src 'self' https://vercel.live wss://ws-us3.pusher.com${dev ? " ws:" : ""}`,
   "media-src 'self'",
   "worker-src 'self'",

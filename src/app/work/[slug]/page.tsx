@@ -2,13 +2,25 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote/rsc";
-import { ArrowLeft,ArrowUpRight } from "lucide-react";
-import { getProject,getProjects } from "@/lib/content";
-import { Badge } from "@/components/ui/badge";
-import { CaseDetails } from "@/components/project-card";
+import { getProject, getProjects } from "@/lib/content";
 import { TrackedLink } from "@/components/analytics";
-import { BrandLogo, ProductCover } from "@/components/brand-cover";
+import { ProductCover } from "@/components/brand-cover";
 import { Footer } from "@/components/footer";
 export async function generateStaticParams(){return (await getProjects()).map(p=>({slug:p.slug}));}
 export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{const p=await getProject((await params).slug);return {title:p?.title??"Not found",description:p?.summary};}
-export default async function ProjectPage({params}:{params:Promise<{slug:string}>}){const p=await getProject((await params).slug);if(!p)notFound();return <><main id="main" className="shell case-page"><Link href="/#work" className="text-link"><ArrowLeft size={14}/>All work</Link><ProductCover id={p.slug} caption/><div className="case-header"><BrandLogo id={p.slug}/><div className="flex flex-wrap items-center gap-3"><Badge>#{p.domain??p.category}</Badge><span className="eyebrow">{p.period}</span></div><h1>{p.title}</h1><p className="case-subtitle">{p.outcome??p.subtitle}</p><p className="eyebrow mt-6">{p.role}</p><div className="mt-7 flex flex-wrap gap-3">{p.links.map(link=><TrackedLink href={link.href} key={link.href} item={`${p.slug}:${link.label}`} className="button button-primary">{link.label}<ArrowUpRight size={15}/></TrackedLink>)}</div></div><div className="case-body-grid"><article className="prose"><MDXRemote source={p.body}/></article><aside className="case-aside"><span className="eyebrow">IN THE DETAILS</span><div className="mt-4"><CaseDetails project={p}/></div>{[p.primaryMetric,...p.supportingMetrics,...p.metrics].filter((m,i,all)=>m&&all.findIndex(x=>x?.label===m.label)===i).slice(0,4).map(metric=><div key={metric!.label} className="case-metric"><strong>{metric!.value}</strong><span>{metric!.label}</span></div>)}</aside></div><div className="case-back"><Link href="/#work" className="text-link"><ArrowLeft size={14}/>Back to selected work</Link></div></main><Footer/></>;}
+export default async function ProjectPage({params}:{params:Promise<{slug:string}>}){
+  const p=await getProject((await params).slug);
+  if(!p)notFound();
+  const metrics=[p.primaryMetric,...p.supportingMetrics,...p.metrics].filter((m,i,all)=>m&&all.findIndex(x=>x?.label===m.label)===i).slice(0,4);
+  return <><main id="main" className="page doc">
+    <Link href="/#work" className="back link">← All work</Link>
+    <h1>{p.title}</h1>
+    <p className="meta">{p.role} · {p.period}{p.domain&&` · ${p.domain}`}</p>
+    <p className="lede">{p.outcome??p.subtitle}</p>
+    {metrics.length>0&&<div className="facts-grid">{metrics.map(m=><div key={m!.label}><b>{m!.value}</b><span>{m!.label}</span></div>)}</div>}
+    <ProductCover id={p.slug}/>
+    <article className="prose"><MDXRemote source={p.body}/></article>
+    {p.metricContext&&<p className="proof-note">{p.metricContext}</p>}
+    <p className="row-links" style={{marginTop:24}}>{p.links.map(link=><TrackedLink className="link" href={link.href} key={link.href} item={`${p.slug}:${link.label}`}>{link.label} ↗</TrackedLink>)}</p>
+  </main><Footer/></>;
+}

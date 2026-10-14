@@ -1,17 +1,30 @@
 "use client";
-import { ArrowUpRight, FlaskConical } from "lucide-react";
+import { useState } from "react";
+import { Plus } from "lucide-react";
 import experiments from "../../content/experiments.json";
 import { BrandLogo, ProductCover } from "./brand-cover";
-import { TrackedLink } from "./analytics";
+import { TrackedLink, useAnalytics } from "./analytics";
 
-/** Compact cards (homepage): cover, type chip, name, one-line title, honesty tag, links. Full cards add the summary. */
-export function ExperimentLab({ compact = false }: { compact?: boolean }) {
-  return <div className={compact ? "experiment-grid is-compact" : "experiment-grid"} role={compact ? "list" : undefined}>{experiments.map(item => <article className="experiment-card" key={item.id} role={compact ? "listitem" : undefined}>
-    <div className="experiment-cover"><ProductCover id={item.id} /><span className="cover-chip"><FlaskConical size={11} aria-hidden="true" />{item.type}</span></div>
-    <div className="experiment-brand"><BrandLogo id={item.id} /><p className="experiment-name">{item.name}<span>{item.domain}</span></p></div>
-    <h3>{item.title}</h3>
-    {!compact && <p className="experiment-summary">{item.summary}</p>}
-    <p className="experiment-boundary">{item.boundary}</p>
-    <div className="experiment-links">{item.links.map(link => <TrackedLink key={link.href} href={link.href} event="artifact_open" item={`${item.id}:${link.label}`}>{link.label}<ArrowUpRight size={14} /></TrackedLink>)}</div>
-  </article>)}</div>;
+/** Independent work as an index: one line each, open a row for the summary, honesty note and links. */
+export function ExperimentLab() {
+  const [openId, setOpenId] = useState<string | null>(null);
+  const track = useAnalytics();
+  return <ol className="rows">{experiments.map((item, index) => {
+    const open = openId === item.id;
+    return <li key={item.id} className={`row ${open ? "is-open" : ""}`} id={`exp-${item.id}`}>
+      <button type="button" className="row-btn" aria-expanded={open} aria-controls={`exp-body-${item.id}`} onClick={() => { setOpenId(open ? null : item.id); if (!open) track("artifact_open", { item: `${item.id}:expand` }); }}>
+        <span className="n">{String(index + 1).padStart(2, "0")}</span>
+        <span className="t"><BrandLogo id={item.id} /><b>{item.name}</b> <span>· {item.title}</span></span>
+        <span className="y">{item.type.replace("Case study + prototype", "Case study")}</span>
+        <Plus className="chev" size={15} aria-hidden="true" />
+        <span className="d">{item.summary}</span>
+      </button>
+      {open && <div className="row-body" id={`exp-body-${item.id}`}>
+        <p>{item.summary}</p>
+        <ProductCover id={item.id} />
+        <p className="boundary">{item.boundary}</p>
+        <div className="row-links">{item.links.map(link => <TrackedLink className="link" key={link.href} href={link.href} event="artifact_open" item={`${item.id}:${link.label}`}>{link.label} ↗</TrackedLink>)}</div>
+      </div>}
+    </li>;
+  })}</ol>;
 }

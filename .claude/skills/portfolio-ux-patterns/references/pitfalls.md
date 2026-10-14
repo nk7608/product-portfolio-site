@@ -28,3 +28,10 @@ Each of these happened on this site. The "seen as" line says how to recognise it
 15. **Hover-only affordances.** Spotlight/lift are fine, but every action must also be visible without hover.
 16. **Width-based CSS cascade bugs.** A later unscoped rule (`.work-summary>.product-cover{height:224px}`) silently beat the mobile rule. Put base rules before media queries and scope consistently.
 17. **Measuring by eye.** "Feels shorter" isn't a check; run `scripts/measure.mjs` and compare with the budgets.
+
+## Round 2 (Oct 14, 2026)
+18. **Looking generated.** Glass, gradient edges, halos, italic-accent headline, mono eyebrows, chip rows — each was added to "polish" the site and together they read as AI output. See `portfolio-visual-language/references/anti-slop.md`.
+19. **Four "looks" that were really four layouts.** Themes should change colour and type only; the new Paper/Stone/Ink/Night × accent system does exactly that.
+20. **A guided tour as the only personalisation.** Personalisation now arranges the normal page and says so ("Arranged for … Change").
+21. **Controls with no reset or no visible entry point.** Every control has a visible button, a ⌘K entry where useful, and "Reset to default".
+22. **Font variables on `<body>` while `[data-font]` lives on `<html>`.** The serif setting silently did nothing until the font classes moved to `<html>`.

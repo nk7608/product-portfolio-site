@@ -1,60 +1,38 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useTheme } from "next-themes";
-import { Menu, Moon, Sun, X } from "lucide-react";
+import { Command, SlidersHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useAnalytics, TrackedLink } from "./analytics";
+import { usePrefs } from "./prefs";
 
-const resumeUrl = "/assets/nayana-kumari-ai-product-manager-resume.pdf";
-const resumeFilename = "Nayana-Kumari-AI-Product-Manager-Resume.pdf";
-
-export function ThemeToggle() {
-  const { resolvedTheme, setTheme } = useTheme();
-  const track = useAnalytics();
-  return <button type="button" className="theme-toggle icon-button" aria-label="Toggle light and dark mode" onClick={() => {
-    const next = resolvedTheme === "dark" ? "light" : "dark";
-    setTheme(next);
-    track("theme_change", { theme: next });
-  }}><Moon className="size-4 dark:hidden"/><Sun className="hidden size-4 dark:block"/></button>;
+/** Bangalore time, rendered after mount so server and client markup match. */
+function Clock() {
+  const [time, setTime] = useState("");
+  useEffect(() => {
+    const tick = () => setTime(new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Kolkata" }).format(new Date()));
+    tick(); const timer = setInterval(tick, 30000); return () => clearInterval(timer);
+  }, []);
+  return <span className="clock" aria-label={time ? `Bangalore, ${time}` : "Bangalore"}><i aria-hidden="true" />Bangalore {time && <span className="num">{time}</span>}</span>;
 }
 
 export function Header() {
+  const { open } = usePrefs();
   const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
   useEffect(() => {
-    const update = () => setScrolled(window.scrollY > 18);
-    update();
-    window.addEventListener("scroll", update, { passive: true });
+    const update = () => setScrolled(window.scrollY > 8);
+    update(); window.addEventListener("scroll", update, { passive: true });
     return () => window.removeEventListener("scroll", update);
   }, []);
-  useEffect(() => {
-    const close = () => setOpen(false);
-    window.addEventListener("hashchange", close);
-    return () => window.removeEventListener("hashchange", close);
-  }, []);
-
-  const internal = [
-    ["Work", "/#work"], ["Experiments", "/#independent-work"], ["About", "/#about"],
-  ] as const;
-
-  return <header className={cn("site-header", scrolled && "is-scrolled", open && "menu-open")}>
-    <div className="header-shell">
-      <Link href="/" aria-label="Nayana Kumari home" className="wordmark">Nayana Kumari<span>.</span></Link>
-      <nav aria-label="Main navigation" className="desktop-nav">
-        {internal.map(([label, href]) => <a className="nav-link" href={href} key={href}>{label}</a>)}
-        <TrackedLink className="nav-link" href={resumeUrl} download={resumeFilename} event="resume_link" item="header-resume">Resume</TrackedLink>
-        <TrackedLink className="nav-link nav-contact" href="mailto:nayanak872@gmail.com" event="contact_open" item="header-email">Contact</TrackedLink>
-        <ThemeToggle/>
+  return <header className={cn("topbar", scrolled && "is-scrolled")}>
+    <div className="topbar-inner">
+      <Link href="/" className="wordmark">Nayana Kumari</Link>
+      <Clock />
+      <nav aria-label="Main">
+        <Link href="/#work" className="hide-sm">Work</Link>
+        <Link href="/#contact" className="hide-sm">Contact</Link>
+        <button type="button" className="cmd-btn" onClick={() => open("command")} aria-label="Open command menu"><Command size={14} aria-hidden="true" /><kbd>K</kbd></button>
+        <button type="button" className="icon-btn" onClick={() => open("controls")} aria-label="Display and reading settings"><SlidersHorizontal size={16} /></button>
       </nav>
-      <div className="mobile-actions"><ThemeToggle/><button type="button" className="icon-button menu-button" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen(value => !value)}>{open ? <X size={18}/> : <Menu size={18}/>}</button></div>
     </div>
-    {open && <nav aria-label="Mobile navigation" className="mobile-nav">
-      {internal.map(([label, href]) => <a className="mobile-nav-link" href={href} key={href} onClick={() => setOpen(false)}>{label}</a>)}
-      <TrackedLink className="mobile-nav-link" href={resumeUrl} download={resumeFilename} event="resume_link" item="mobile-resume" onClick={() => setOpen(false)}>Resume</TrackedLink>
-      <TrackedLink className="mobile-nav-link" href="mailto:nayanak872@gmail.com" event="contact_open" item="mobile-email" onClick={() => setOpen(false)}>Contact</TrackedLink>
-      <button type="button" className="mobile-nav-link" onClick={() => { setOpen(false); window.dispatchEvent(new Event("open-appearance")); }}>Appearance</button>
-    </nav>}
   </header>;
 }

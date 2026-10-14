@@ -71,3 +71,30 @@ Take: the appearance dialog shows actual mini-renders of the hero in each look, 
 ## 10. Sticky contact on mobile — Fiverr
 
 Fiverr keeps Contact reachable. Take: once the header scrolls out of view on phones, show a slim bottom bar with Email (primary) and Résumé. Hide it when the contact section is on screen.
+
+---
+
+## Round 2 (Oct 14, 2026): minimal, human, controllable
+
+## 11. Hand-made personal sites — Emil Kowalski, Paco Coursey, Rauno Freiberg (Firecrawl branding extraction)
+One ~640px column; headings the same size as body (14–16px) and set apart by weight; warm off-white `#FDFDFC` with `#21201C` text and one muted grey; Projects/Writing as title + one-line lists; a "Now"/"Today" paragraph; copy-to-clipboard email. → Whole homepage. Details in `docs/RESEARCH-2026-10.md`.
+
+## 12. Numbered index rows with local time — Waka Waka, A24
+- **Waka Waka** — [section](https://mobbin.com/sites/sections/fe089d5d-5adb-4849-a282-ae46d8fd7eac): N°0001 rows with aligned columns; "LOS ANGELES, CA 01:59 ●" in the header.
+- **A24** — [section](https://mobbin.com/sites/sections/b645a881-adf5-43f3-a86c-758cd54f0b72): titles with the year set small beside them.
+→ Experience, Experiments and Writing rows; "Bangalore 13:41" in the header.
+
+## 13. Onboarding that personalises a home — Xero, Jasper
+- **Xero** — [flow](https://mobbin.com/flows/215632ce-e64c-4fc6-bff6-427026f68ce9): 3-segment progress, one question, option cards, "This helps personalise your setup guide", Back/Next.
+- **Jasper** — [flow](https://mobbin.com/flows/10732fd6-f1f1-4e21-bc58-b60592f6ddae): "What do you want to work on?" then a home arranged around the answer.
+→ The 3-step intro and the "Arranged for … Change" note. See `portfolio-onboarding-journeys`.
+
+## 14. Reader-style settings — Matter, X, Perplexity
+- **Matter** — [screen](https://mobbin.com/screens/fc0a02b9-f5b6-4ca3-9d08-3bd6872738c3): theme swatches, font, size, spacing, width, "Reset to default".
+- **X display** — [screen](https://mobbin.com/screens/e00feb2a-5421-448c-a2af-98f4313c9ab9): size slider, accent dots, background choice.
+- **Perplexity** — [screen](https://mobbin.com/screens/27ad8f42-8906-4552-a56d-01c4c15e69dd): theme thumbnails and a serif/sans "Aa" choice.
+→ The Settings sheet. See `portfolio-user-controls`.
+
+## 15. Command menu — Mistral, Magnific
+- **Mistral** — [screen](https://mobbin.com/screens/8450c1c7-7c10-40a3-9af3-c9c234ac4b53) and **Magnific** — [screen](https://mobbin.com/screens/e22e26e2-f813-4f1e-beda-43c9ecf26419): grouped results, keyboard hints, actions + navigation + settings in one list.
+→ ⌘K menu.

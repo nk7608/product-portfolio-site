@@ -1,27 +1,26 @@
-// WCAG contrast check of the live tokens for every look × mode.
+// WCAG contrast check of the live tokens for every theme × accent.
 // Usage (dev server running): node .claude/skills/portfolio-looks/scripts/contrast.mjs [url]
 // Requires Playwright (see portfolio-ux-patterns/scripts/measure.mjs header).
 import { chromium } from "playwright";
 
 const url = process.argv[2] ?? "http://localhost:3100/";
-const looks = ["fieldnotes", "blocks", "greenroom", "chic"];
+const themes = ["paper", "stone", "ink", "night"];
+const accentsList = ["rust", "cobalt", "moss", "plum"];
 // [label, foreground token, background token, minimum ratio]
 const pairs = [
-  ["text / background", "--foreground", "--background", 4.5],
-  ["text / surface", "--foreground", "--surface", 4.5],
-  ["muted / background", "--muted", "--background", 4.5],
-  ["muted / surface", "--muted", "--surface", 4.5],
-  ["accent / background (UI)", "--accent", "--background", 3],
-  ["accent-contrast / accent", "--accent-contrast", "--accent", 4.5],
-  ["cover caption / cover", "--cn-ink", "--cover-base", 4.5],
-  ["cover muted / cover", "--cn-muted", "--cover-base", 3],
+  ["text / background", "--fg", "--bg", 4.5],
+  ["text / panel", "--fg", "--panel", 4.5],
+  ["muted / background", "--muted", "--bg", 4.5],
+  ["muted / panel", "--muted", "--panel", 4.5],
+  ["muted / hover", "--muted", "--hover", 4.5],
+  ["accent text / background", "--accent", "--bg", 4.5],
 ];
 
 const browser = await chromium.launch();
 const rows = [];
-for (const look of looks) for (const mode of ["light", "dark"]) {
+for (const look of themes) for (const mode of accentsList) {
   const page = await browser.newPage();
-  await page.addInitScript(([l, m]) => { try { localStorage.setItem("nayana-appearance-v1", l); localStorage.setItem("theme", m); } catch {} }, [look, mode]);
+  await page.addInitScript(([t, a]) => { try { localStorage.setItem("nayana-prefs-v2", JSON.stringify({ theme: t, accent: a, onboarded: true })); } catch {} }, [look, mode]);
   await page.goto(url, { waitUntil: "domcontentloaded" });
   const results = await page.evaluate((pairs) => {
     const probe = document.createElement("div"); document.body.appendChild(probe);
@@ -36,7 +35,7 @@ for (const look of looks) for (const mode of ["light", "dark"]) {
       return [0, 1, 2].map(i => [r, g, b][i] * a + over[i] * (1 - a));
     };
     const lum = ([r, g, b]) => { const f = c => { c /= 255; return c <= .03928 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4; }; return .2126 * f(r) + .7152 * f(g) + .0722 * f(b); };
-    const base = resolve("--background");
+    const base = resolve("--bg");
     return pairs.map(([label, fg, bg, min]) => {
       const B = resolve(bg, base), F = resolve(fg, B);
       const [l1, l2] = [lum(F), lum(B)].sort((a, b) => b - a);
@@ -44,11 +43,11 @@ for (const look of looks) for (const mode of ["light", "dark"]) {
       return { label, ratio: Math.round(ratio * 100) / 100, min, pass: ratio >= min };
     });
   }, pairs);
-  for (const r of results) rows.push({ look, mode, ...r });
+  for (const r of results) rows.push({ theme: look, accent: mode, ...r });
   await page.close();
 }
 await browser.close();
 const failing = rows.filter(r => !r.pass);
-console.table(failing.length ? failing : rows.filter((_, i) => i % 8 === 0));
+console.table(failing.length ? failing : rows.filter((_, i) => i % 6 === 0));
 console.log(failing.length ? `${failing.length} pair(s) below minimum.` : `All ${rows.length} pairs pass.`);
 process.exitCode = failing.length ? 1 : 0;

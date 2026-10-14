@@ -1,59 +1,51 @@
 "use client";
-import { useRef } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ArrowUpRight, ChevronDown, Plus } from "lucide-react";
+import { useId } from "react";
+import { Plus } from "lucide-react";
 import type { Project } from "@/lib/schema";
 import { duration } from "@/lib/lens";
-import { cn } from "@/lib/utils";
 import { BrandLogo, ProductCover } from "./brand-cover";
 import { TrackedLink } from "./analytics";
 
-type Place = { company: string; location: string };
-
-/** One row per role, newest first. The row is the summary; the brief opens inline. */
-export function ExperienceList({ projects, places, openSlug, onToggle }: { projects: Project[]; places: Place[]; openSlug: string | null; onToggle: (slug: string) => void }) {
-  return <ol className="experience-list">{projects.map((project, index) => <ExperienceRow key={project.slug} project={project} location={places[index]?.location} open={openSlug === project.slug} onToggle={() => onToggle(project.slug)} />)}</ol>;
+/** Numbered index of roles (newest first). The row is the summary; the brief opens in place. */
+export function ExperienceList({ projects, places, openSlug, onToggle }: { projects: Project[]; places: { location: string }[]; openSlug: string | null; onToggle: (slug: string) => void }) {
+  return <ol className="rows">{projects.map((project, index) => <ExperienceRow key={project.slug} n={index + 1} project={project} location={places[index]?.location} open={openSlug === project.slug} onToggle={() => onToggle(project.slug)} />)}</ol>;
 }
 
-function ExperienceRow({ project, location, open, onToggle }: { project: Project; location?: string; open: boolean; onToggle: () => void }) {
-  const trigger = useRef<HTMLButtonElement>(null);
-  const reduceMotion = useReducedMotion();
+function ExperienceRow({ n, project, location, open, onToggle }: { n: number; project: Project; location?: string; open: boolean; onToggle: () => void }) {
+  const id = useId();
   const metric = project.primaryMetric ?? project.metrics[0];
-  const id = `brief-${project.slug}`;
   const span = duration(project.period);
-  return <li className={cn("experience-row", open && "is-open")} id={`work-${project.slug}`}>
-    <button ref={trigger} type="button" className="experience-summary" aria-expanded={open} aria-controls={id} onClick={onToggle}>
-      <BrandLogo id={project.slug} />
-      <span className="experience-main">
-        <span className="experience-title"><strong>{project.role.split(" · ")[0]}</strong> · {project.title}</span>
-        <span className="experience-meta">{project.period}{span && <> · {span}</>}{location && <> · {location}</>}</span>
-        {metric && <span className="experience-result"><b>{metric.value}</b> {metric.label}</span>}
-      </span>
-      <ChevronDown className="experience-chevron" size={18} aria-hidden="true" />
+  const year = project.period.match(/\d{4}(?!.*\d{4})/)?.[0];
+  return <li className={`row ${open ? "is-open" : ""}`} id={`work-${project.slug}`}>
+    <button type="button" className="row-btn" aria-expanded={open} aria-controls={id} onClick={onToggle}>
+      <span className="n">{String(n).padStart(2, "0")}</span>
+      <span className="t"><BrandLogo id={project.slug} /><b>{project.role.split(" · ")[0]}</b> <span>· {project.title}</span></span>
+      <span className="y" title={project.period}>{year}{span && ` · ${span}`}</span>
+      <Plus className="chev" size={15} aria-hidden="true" />
+      {metric && <span className="r"><b>{metric.value}</b> {metric.label}</span>}
+      <span className="d">{project.outcome ?? project.subtitle}</span>
     </button>
-    <AnimatePresence initial={false}>
-      {open && <motion.div id={id} className="experience-brief" initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: reduceMotion ? 0 : .3, ease: [.22, 1, .36, 1] }}>
-        <ProductCover id={project.slug} caption />
-        <p className="brief-tldr"><span className="detail-label">TL;DR</span>{project.outcome ?? project.subtitle}</p>
-        <div className="brief-grid">
-          {project.challenge && <section><p className="detail-label">Challenge</p><p>{project.challenge}</p></section>}
-          {project.decisions.length > 0 && <section><p className="detail-label">Approach</p><ul>{project.decisions.slice(0, 3).map(item => <li key={item}>{item}</li>)}</ul></section>}
-          {project.impact.length > 0 && <section><p className="detail-label">Results</p><ul>{project.impact.slice(0, 3).map(item => <li key={item}>{item}</li>)}</ul></section>}
-        </div>
-        <details className="story-more">
-          <summary>Scope, what shipped & what I’d change<Plus size={15} aria-hidden="true" /></summary>
-          {project.ownership && <div className="story-prose"><p className="detail-label">Scope & ownership</p><p>{project.ownership}</p></div>}
-          {project.shipped.length > 0 && <div className="story-list"><p className="detail-label">Release notes</p><ul>{project.shipped.map(item => <li key={item}>{item}</li>)}</ul></div>}
-          {project.alignment && <div className="judgment-block"><p className="detail-label">Alignment challenge</p><p>{project.alignment}</p></div>}
-          {project.reflection && <div className="judgment-block is-reflection"><p className="detail-label">What I would do differently</p><p>{project.reflection}</p></div>}
-          {project.metricContext && <p className="metric-context">{project.metricContext}</p>}
-        </details>
-        <div className="brief-links">
-          <TrackedLink href={`/work/${project.slug}`} event="case_detail_open" item={`${project.slug}:full-case-study`}>Full brief<ArrowUpRight size={14} /></TrackedLink>
-          {project.links.map(link => <TrackedLink href={link.href} key={link.href} event="evidence_click" item={`${project.slug}:${link.label}`}>{link.label}<ArrowUpRight size={14} /></TrackedLink>)}
-          <button type="button" className="brief-close" onClick={() => { onToggle(); trigger.current?.focus({ preventScroll: true }); }}>Close</button>
-        </div>
-      </motion.div>}
-    </AnimatePresence>
+    {open && <div className="row-body" id={id}>
+      <p className="tldr">{project.outcome ?? project.subtitle}</p>
+      <p className="boundary">{project.period}{location && ` · ${location}`}{project.domain && ` · ${project.domain}`}</p>
+      <ProductCover id={project.slug} />
+      <div className="brief-cols">
+        {project.challenge && <div><h3>Challenge</h3><p>{project.challenge}</p></div>}
+        {project.decisions.length > 0 && <div><h3>Approach</h3><ul>{project.decisions.slice(0, 2).map(item => <li key={item}>{item}</li>)}</ul></div>}
+        {project.impact.length > 0 && <div><h3>Results</h3><ul>{project.impact.slice(0, 3).map(item => <li key={item}>{item}</li>)}</ul></div>}
+      </div>
+      <details>
+        <summary>Scope, release notes and what I’d change</summary>
+        {project.ownership && <p>{project.ownership}</p>}
+        {project.shipped.length > 0 && <ul>{project.shipped.map(item => <li key={item}>{item}</li>)}</ul>}
+        {project.alignment && <p><b>Alignment.</b> {project.alignment}</p>}
+        {project.reflection && <p><b>Differently next time.</b> {project.reflection}</p>}
+        {project.metricContext && <p><b>About the numbers.</b> {project.metricContext}</p>}
+      </details>
+      <div className="row-links">
+        <TrackedLink className="link" href={`/work/${project.slug}`} event="case_detail_open" item={`${project.slug}:full`}>Full write-up →</TrackedLink>
+        {project.links.map(link => <TrackedLink className="link" href={link.href} key={link.href} event="evidence_click" item={`${project.slug}:${link.label}`}>{link.label} ↗</TrackedLink>)}
+      </div>
+    </div>}
   </li>;
 }
