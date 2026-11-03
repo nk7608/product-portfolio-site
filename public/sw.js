@@ -1,7 +1,7 @@
 /* Offline support. Pages stay network-first; when the network fails we serve, in order:
  * 1) the last copy of that page this browser saw, 2) /offline.html (a static summary with contact details).
  * The résumé and the offline game are cached so they work offline too. */
-const CACHE = "nayana-offline-v2";
+const CACHE = "nayana-offline-v3";
 const PRECACHE = ["/offline.html", "/scope-runner.html", "/assets/nayana-kumari-ai-product-manager-resume.pdf"];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(PRECACHE)).then(() => self.skipWaiting()));
